@@ -1,3 +1,4 @@
 all:
-	ln -s $$PWD/.vimrc $$HOME/
-	ln -s $$PWD/.gitconfig $$HOME/
+	for i in $$(find . -mindepth 1 -maxdepth 1 -name ".*" -printf "%P\n"); do \
+		ln -sfn $$PWD/$$i ~/$$i; \
+	done

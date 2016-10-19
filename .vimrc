@@ -42,6 +42,12 @@ au BufNewFile,BufRead *.module setfiletype php
 au BufRead,BufNewFile *.ino setfiletype arduino
 au BufRead,BufNewFile *.pde setfiletype processing
 
+au BufNewFile,BufRead *.markdown,*.mdown,*.mkd,*.mkdn,*.mdwn,*.md  set ft=markdown
+
 au FileType * autocmd BufWritePre <buffer> :%s/\s\+$//e
 
 filetype plugin on
+
+"call plug#begin()
+"Plug 'fatih/vim-go'
+"call plug#end()
