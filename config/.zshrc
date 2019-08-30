@@ -31,5 +31,6 @@ export LC_ALL=en_US.UTF-8
 
 export VAGRANT_DEFAULT_PROVIDER=virtualbox
 
+export GOROOT=/usr/local/go
 export GOPATH=$HOME/go
 export PATH=$PATH:$GOROOT/bin:$GOPATH/bin:$HOME/bin

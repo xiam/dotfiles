@@ -1,3 +1,4 @@
+execute pathogen#infect()
 syntax on
 
 set encoding=utf-8
@@ -30,7 +31,6 @@ nnoremap <C-V> :vsplit .<CR>
 nnoremap <C-H> :split .<CR>
 nnoremap <C-Q> :q<CR>
 
-au BufNewFile,BufRead *.go setfiletype go
 au BufNewFile,BufRead Makefile*,*.go set noexpandtab
 au BufWritePost *.go !go fmt <afile>
 
@@ -47,7 +47,3 @@ au BufNewFile,BufRead *.markdown,*.mdown,*.mkd,*.mkdn,*.mdwn,*.md  set ft=markdo
 au FileType * autocmd BufWritePre <buffer> :%s/\s\+$//e
 
 filetype plugin on
-
-"call plug#begin()
-"Plug 'fatih/vim-go'
-"call plug#end()

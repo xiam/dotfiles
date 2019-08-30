@@ -1,9 +1,0 @@
-let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =7
-let g:netrw_dirhist_1='/home/rev/projects/upper/site/sites/default/content/db'
-let g:netrw_dirhist_2='/home/rev/projects/upper/site/sites/default/content/db/getting-started'
-let g:netrw_dirhist_3='/home/rev/projects/upper/site/sites/default/content/db'
-let g:netrw_dirhist_4='/home/rev/projects/upper/site/sites/default/content'
-let g:netrw_dirhist_5='/home/rev/projects/upper/site/sites/default/content/db'
-let g:netrw_dirhist_6='/home/rev/projects/upper/site/sites/default/content'
-let g:netrw_dirhist_7='/home/rev/projects/upper/site/sites/default'
