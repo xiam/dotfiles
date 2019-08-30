@@ -1,17 +1,10 @@
-# Set up the prompt
-
 autoload -Uz promptinit
 promptinit
-prompt walters
+prompt restore
 
-# Use emacs keybindings even if our EDITOR is set to vi
-bindkey -e
-
-# Keep 1000 lines of history within the shell and save it to ~/.zsh_history:
-SAVEHIST=1000
+SAVEHIST=99999
 HISTFILE=~/.zsh_history
 
-# Use modern completion system
 autoload -Uz compinit
 compinit
 
@@ -32,33 +25,11 @@ zstyle ':completion:*' verbose true
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
 zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 
-export GOROOT=/usr/local/go
-export GOPATH=$HOME/go
-export PATH=$PATH:$GOROOT/bin:$GOPATH/bin:$HOME/bin
-
-#PROMPT='%b%s%u%m:%B %3c %b%# %B'
-#PROMPT=$'%{\e[0;37m%}%B%*%b %{\e[0;35m%}%m:%{\e[0;37m%}%~ %(!.#.>) %{\e[00m%} %B'
-#PROMPT=$'%{\e[0;37m%}%B%*%b %{\e[0;35m%}%m:%{\e[0;37m%}%~ %(!.#.>) %{\e[00m%} %B'
-#PROMPT=$'%{\e[0;32m%}%m:%{\e[0;37m%}%~ %(!.#.>) %{\e[00m%}%B'
-#RPROMPT=""
-#POSTEDIT=`print -P -n %b`
-
-autoload -U promptinit
-promptinit
 prompt suse
 
 export LC_ALL=en_US.UTF-8
 
-if [ -d $HOME/Library ]; then
-  export ANDROID_HOME=$HOME/Library/Android/sdk
-  export ANDROID_SDK_TOOLS=$ANDROID_HOME/tools/
-  export ANDROID_PLATFORM_TOOLS=$ANDROID_HOME/platform-tools/
-  export ANDROID_NDK_PATH=/Users/rev/opt/android/android-ndk-r10e
-  export ANDROID_BUILD_TOOLS_BIN=/Users/rev/Library/Android/sdk/build-tools/22.0.1/
-  export PATH=$PATH:$ANDROID_SDK_TOOLS:$ANDROID_PLATFORM_TOOLS:$ANDROID_NDK_PATH:$ANDROID_BUILD_TOOLS_BIN
-  export PATH=$PATH:/Users/rev/Library/Android/sdk/build-tools/22.0.1/aapt
-fi
-
 export VAGRANT_DEFAULT_PROVIDER=virtualbox
 
-export PATH=$PATH:$PWD/fakebin
+export GOPATH=$HOME/go
+export PATH=$PATH:$GOROOT/bin:$GOPATH/bin:$HOME/bin
