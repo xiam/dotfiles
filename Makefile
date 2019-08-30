@@ -1,4 +1,6 @@
-all:
-	for i in $$(find . -mindepth 1 -maxdepth 1 -name ".*" -printf "%P\n" | grep -v \.git/); do \
-		ln -sfn $$PWD/$$i ~/$$i; \
+install:
+	@ \
+	for FILE in $$(find config -mindepth 1 -maxdepth 1); do \
+		export BASENAME=$$(basename $$FILE); \
+		ln -sfn $$PWD/$$FILE $$HOME/$$BASENAME; \
 	done
