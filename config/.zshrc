@@ -35,4 +35,4 @@ export GOROOT=/usr/local/go
 export GOPATH=$HOME/go
 export PATH=$PATH:$GOROOT/bin:$GOPATH/bin:$HOME/bin
 
-export PATH="/usr/local/opt/libpq/bin:$PATH"
+export EDITOR=vim
