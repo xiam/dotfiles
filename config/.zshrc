@@ -35,6 +35,4 @@ export GOROOT=/usr/local/go
 export GOPATH=$HOME/go
 export PATH=$PATH:$GOROOT/bin:$GOPATH/bin:$HOME/bin
 
-#if [ -z "$TMUX" ]; then
-#  tmux
-#fi
+export PATH="/usr/local/opt/libpq/bin:$PATH"
