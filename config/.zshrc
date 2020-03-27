@@ -36,3 +36,5 @@ export GOPATH=$HOME/go
 export PATH=$PATH:$GOROOT/bin:$GOPATH/bin:$HOME/bin
 
 export EDITOR=vim
+
+keychain ~/.ssh/id_rsa
