@@ -37,4 +37,10 @@ export PATH=$PATH:$GOROOT/bin:$GOPATH/bin:$HOME/bin
 
 export EDITOR=vim
 
-keychain ~/.ssh/id_rsa
+eval $(keychain --eval $HOME/.ssh/id_rsa)
+
+export NVM_DIR="$HOME/.nvm"
+if [ -d $NVM_DIR ]; then
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+fi
+
