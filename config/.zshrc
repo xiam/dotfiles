@@ -37,7 +37,9 @@ export PATH=$PATH:$GOROOT/bin:$GOPATH/bin:$HOME/bin
 
 export EDITOR=vim
 
-eval $(keychain --eval $HOME/.ssh/id_rsa)
+if [ -x "$(command -v keychain)" ]; then
+  eval $(keychain --eval $HOME/.ssh/id_rsa)
+fi
 
 export NVM_DIR="$HOME/.nvm"
 if [ -d $NVM_DIR ]; then
