@@ -31,6 +31,7 @@ export LC_ALL=en_US.UTF-8
 
 export VAGRANT_DEFAULT_PROVIDER=virtualbox
 
+# Go
 export GOROOT=/usr/local/go
 export GOPATH=$HOME/go
 export PATH=$PATH:$GOROOT/bin:$GOPATH/bin:$HOME/bin
@@ -41,8 +42,16 @@ if [ -x "$(command -v keychain)" ]; then
   eval $(keychain --eval $HOME/.ssh/id_rsa)
 fi
 
+# NVM
 export NVM_DIR="$HOME/.nvm"
 if [ -d $NVM_DIR ]; then
   [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 fi
 
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# Android SDK
+if [ -d "/Users/$USER/Library/Android/sdk" ]; then
+  export ANDROID_HOME="/Users/$USER/Library/Android/sdk"
+  export PATH=${PATH}:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools
+fi
