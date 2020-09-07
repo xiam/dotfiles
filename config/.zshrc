@@ -55,3 +55,8 @@ if [ -d "/Users/$USER/Library/Android/sdk" ]; then
   export ANDROID_HOME="/Users/$USER/Library/Android/sdk"
   export PATH=${PATH}:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools
 fi
+
+if [ -d "$HOME/.rvm/bin" ]; then
+  # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+  export PATH="$PATH:$HOME/.rvm/bin"
+fi
