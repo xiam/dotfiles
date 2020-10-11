@@ -22,6 +22,9 @@ set ts=2
 set sw=2
 set softtabstop=2
 
+setl autoread
+set shortmess=a
+
 set hlsearch
 
 nnoremap <C-T> :tabnew<CR>:e .<CR>
