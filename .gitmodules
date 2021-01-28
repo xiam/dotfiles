@@ -1,0 +1,3 @@
+[submodule "config/.vim/bundle/vim-svelte"]
+	path = config/.vim/bundle/vim-svelte
+	url = https://github.com/evanleck/vim-svelte
