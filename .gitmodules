@@ -1,3 +1,6 @@
 [submodule "config/.vim/bundle/vim-svelte"]
 	path = config/.vim/bundle/vim-svelte
 	url = https://github.com/evanleck/vim-svelte
+[submodule "config/.vim/bundle/vim-processing"]
+	path = config/.vim/bundle/vim-processing
+	url = https://github.com/sophacles/vim-processing
