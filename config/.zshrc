@@ -46,6 +46,9 @@ fi
 # Processing
 export PATH=$PATH:$HOME/opt/processing
 
+# Arduino
+export PATH=$PATH:$HOME/opt/arduino
+
 # NVM
 export NVM_DIR="$HOME/.nvm"
 if [ -d $NVM_DIR ]; then

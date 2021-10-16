@@ -50,3 +50,5 @@ au BufNewFile,BufRead *.markdown,*.mdown,*.mkd,*.mkdn,*.mdwn,*.md  set ft=markdo
 au FileType * autocmd BufWritePre <buffer> :%s/\s\+$//e
 
 filetype plugin on
+
+let g:arduino_dir = "$HOME/opt/arduino"

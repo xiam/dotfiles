@@ -4,3 +4,6 @@
 [submodule "config/.vim/bundle/vim-processing"]
 	path = config/.vim/bundle/vim-processing
 	url = https://github.com/sophacles/vim-processing
+[submodule "config/.vim/bundle/vim-arduino"]
+	path = config/.vim/bundle/vim-arduino
+	url = https://github.com/stevearc/vim-arduino
