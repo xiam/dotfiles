@@ -49,6 +49,8 @@ au BufRead,BufNewFile *.pde setfiletype processing
 
 au BufNewFile,BufRead *.markdown,*.mdown,*.mkd,*.mkdn,*.mdwn,*.md  set ft=markdown
 
+au BufWritePre *.ts Prettier
+
 au FileType * autocmd BufWritePre <buffer> :%s/\s\+$//e
 
 filetype plugin on

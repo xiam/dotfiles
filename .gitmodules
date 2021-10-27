@@ -7,3 +7,6 @@
 [submodule "config/.vim/bundle/vim-arduino"]
 	path = config/.vim/bundle/vim-arduino
 	url = https://github.com/stevearc/vim-arduino
+[submodule "config/.vim/bundle/vim-prettier"]
+	path = config/.vim/bundle/vim-prettier
+	url = https://github.com/prettier/vim-prettier
