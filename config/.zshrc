@@ -61,4 +61,15 @@ if [ -d "$HOME/.rvm/bin" ]; then
   export PATH="$PATH:$HOME/.rvm/bin"
 fi
 
+
+# add Pulumi to the PATH
+if [ -d "$HOME/.pulumi/bin" ]; then
+  export PATH="$PATH:$HOME/.pulumi/bin"
+fi
+
+# yarn
+if [ -d "$HOME/.yarn/bin" ]; then
+  export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+fi
+
 bindkey -e

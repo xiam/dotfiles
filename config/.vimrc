@@ -27,6 +27,8 @@ set shortmess=a
 
 set hlsearch
 
+set noswapfile
+
 nnoremap <C-T> :tabnew<CR>:e .<CR>
 nnoremap <C-P> :tabprev<CR>
 nnoremap <C-N> :tabnext<CR>
