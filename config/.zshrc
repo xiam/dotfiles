@@ -34,6 +34,7 @@ export VAGRANT_DEFAULT_PROVIDER=virtualbox
 # Go
 export GOROOT=/usr/local/go
 export GOPATH=$HOME/go
+
 export PATH=$PATH:$GOROOT/bin:$GOPATH/bin:$HOME/bin
 
 export EDITOR=vim
@@ -41,6 +42,12 @@ export EDITOR=vim
 if [ -x "$(command -v keychain)" ]; then
   eval $(keychain --eval $HOME/.ssh/id_rsa)
 fi
+
+# Processing
+export PATH=$PATH:$HOME/opt/processing
+
+# Arduino
+export PATH=$PATH:$HOME/opt/arduino
 
 # NVM
 export NVM_DIR="$HOME/.nvm"
