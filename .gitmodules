@@ -10,3 +10,6 @@
 [submodule "config/.vim/bundle/vim-prettier"]
 	path = config/.vim/bundle/vim-prettier
 	url = https://github.com/prettier/vim-prettier
+[submodule "config/.vim/bundle/typescript-vim"]
+	path = config/.vim/bundle/typescript-vim
+	url = https://github.com/leafgarland/typescript-vim.git
