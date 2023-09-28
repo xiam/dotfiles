@@ -51,6 +51,13 @@ au BufNewFile,BufRead *.markdown,*.mdown,*.mkd,*.mkdn,*.mdwn,*.md  set ft=markdo
 
 au BufWritePre *.ts Prettier
 
+au BufNewFile,BufRead *.py
+  \ set tabstop=4 |
+  \ set softtabstop=4 |
+  \ set sw=4 |
+  \ set autoindent |
+  \ setfiletype python
+
 au FileType * autocmd BufWritePre <buffer> :%s/\s\+$//e
 
 filetype plugin on
