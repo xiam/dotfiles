@@ -79,4 +79,8 @@ if [ -d "$HOME/.yarn/bin" ]; then
   export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 fi
 
+if [ -f $HOME/.nix-profile/etc/profile.d/nix.sh ]; then
+  . $HOME/.nix-profile/etc/profile.d/nix.sh
+fi
+
 bindkey -e
