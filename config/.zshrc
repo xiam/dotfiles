@@ -57,17 +57,25 @@ fi
 
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-# Android SDK
+# Android SDK (OSX)
 if [ -d "/Users/$USER/Library/Android/sdk" ]; then
-  export ANDROID_HOME="/Users/$USER/Library/Android/sdk"
-  export PATH=${PATH}:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools
+  export ANDROID_SDK_ROOT="/Users/$USER/Library/Android/sdk"
 fi
+
+# Android SDK (Linux)
+if [ -d "/usr/lib/android-sdk" ]; then
+  export ANDROID_SDK_ROOT="/usr/lib/android-sdk"
+fi
+
+if [ ! -z "$ANDROID_SDK_ROOT" ]; then
+  export PATH=${PATH}:$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT/platform-tools
+fi
+
 
 if [ -d "$HOME/.rvm/bin" ]; then
   # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
   export PATH="$PATH:$HOME/.rvm/bin"
 fi
-
 
 # add Pulumi to the PATH
 if [ -d "$HOME/.pulumi/bin" ]; then
@@ -79,8 +87,19 @@ if [ -d "$HOME/.yarn/bin" ]; then
   export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 fi
 
+# nixOS
 if [ -f $HOME/.nix-profile/etc/profile.d/nix.sh ]; then
   . $HOME/.nix-profile/etc/profile.d/nix.sh
+fi
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/tmp/google-cloud-sdk/path.zsh.inc' ]; then
+  . '/tmp/google-cloud-sdk/path.zsh.inc';
+fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/tmp/google-cloud-sdk/completion.zsh.inc' ]; then
+  . '/tmp/google-cloud-sdk/completion.zsh.inc';
 fi
 
 bindkey -e
