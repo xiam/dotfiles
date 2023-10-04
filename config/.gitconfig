@@ -1,3 +1,5 @@
 [user]
 	email = jose@xiam.io
 	name = José Nieto
+[url "ssh://git@github.com/"]
+	insteadOf = https://github.com/
