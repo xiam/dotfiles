@@ -90,6 +90,9 @@ fi
 # cygwin
 if [ -d "/cygdrive" ]; then
   export PATH="$PATH:/cygdrive/c/Users/$USER/AppData/Roaming/npm/"
+  export GOPATH="c:\\Users\\$USER\\go"
+  export GOROOT=c:\\Program\ Files\\Go
+  export PATH=$PATH:$GOPATH\\bin
 fi
 
 # nixOS
