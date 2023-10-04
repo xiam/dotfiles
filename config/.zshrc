@@ -79,4 +79,8 @@ if [ -d "$HOME/.yarn/bin" ]; then
   export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 fi
 
+if [ -d "/cygdrive" ]; then
+  export PATH="$PATH:/cygdrive/c/Users/josec/AppData/Roaming/npm/"
+fi
+
 bindkey -e
