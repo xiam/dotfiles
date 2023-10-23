@@ -37,7 +37,7 @@ nnoremap <C-H> :split .<CR>
 nnoremap <C-Q> :q<CR>
 
 au BufNewFile,BufRead Makefile*,*.go set noexpandtab
-au BufWritePost *.go !go fmt <afile>
+au BufWritePost *.go !go fmt <afile> && golangci-lint run <afile>
 
 au BufNewFile,BufRead *.thtml setfiletype php
 au BufNewFile,BufRead *.tpl setfiletype php
