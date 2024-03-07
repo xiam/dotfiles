@@ -37,7 +37,7 @@ nnoremap <C-H> :split .<CR>
 nnoremap <C-Q> :q<CR>
 
 au BufNewFile,BufRead Makefile*,*.go set noexpandtab
-"au BufWritePost *.go !go fmt <afile> && golangci-lint run --fast <afile>
+
 au BufWritePost *.go !go fmt <afile>
 
 au BufNewFile,BufRead *.thtml setfiletype php
@@ -49,8 +49,6 @@ au BufRead,BufNewFile *.ino setfiletype arduino
 au BufRead,BufNewFile *.pde setfiletype processing
 
 au BufNewFile,BufRead *.markdown,*.mdown,*.mkd,*.mkdn,*.mdwn,*.md  set ft=markdown
-
-au BufWritePre *.ts Prettier
 
 au BufNewFile,BufRead *.py
   \ set tabstop=4 |

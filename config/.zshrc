@@ -110,4 +110,8 @@ if [ -f '/tmp/google-cloud-sdk/completion.zsh.inc' ]; then
   . '/tmp/google-cloud-sdk/completion.zsh.inc';
 fi
 
+if [ -f "$HOME/.cargo/env" ]; then
+  source "$HOME/.cargo/env"
+fi
+
 bindkey -e
