@@ -40,7 +40,7 @@ export PATH=/usr/local/bin:$HOME/bin:$GOROOT/bin:$GOPATH/bin:$PATH
 export EDITOR=vim
 
 if [ -x "$(command -v keychain)" ]; then
-  eval $(keychain --eval $HOME/.ssh/id_rsa)
+  eval $(keychain -q --eval $(find ~/.ssh -type f \( -name "id_rsa" -o -name "id_ed25519" \)))
 fi
 
 # Processing
