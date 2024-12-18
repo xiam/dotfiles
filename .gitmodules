@@ -13,10 +13,13 @@
 [submodule "config/.vim/bundle/typescript-vim"]
 	path = config/.vim/bundle/typescript-vim
 	url = https://github.com/leafgarland/typescript-vim.git
-[submodule "config/.vim/pack/github/start/copilot.vim"]
-	path = config/.vim/pack/github/start/copilot.vim
-	url = https://github.com/github/copilot.vim.git
-	branch = release
 [submodule "config/.vim/bundle/rust.vim"]
 	path = config/.vim/bundle/rust.vim
 	url = https://github.com/rust-lang/rust.vim.git
+[submodule "config/.vim/pack/github/start/copilot.vim"]
+	path = config/.vim/pack/ai/start/copilot.vim
+	url = https://github.com/github/copilot.vim.git
+	branch = release
+[submodule "config/.vim/pack/github/start/vim-ai"]
+	path = config/.vim/pack/ai/start/vim-ai
+	url = https://github.com/madox2/vim-ai.git
