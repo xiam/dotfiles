@@ -67,14 +67,14 @@ let g:arduino_dir = "$HOME/opt/arduino"
 let s:vim_ai_endpoint_url = "http://make1.hub:11434/v1/chat/completions"
 
 let s:vim_ai_model_chat = "codegemma:7b"
-let s:vim_ai_model_edit = "codellama:34b"
-let s:vim_ai_model_complete = "codellama:7b"
+let s:vim_ai_model_edit = "granite-code:20b"
+let s:vim_ai_model_complete = "codegemma:2b"
 
 " vim-ai default settings
 let s:vim_ai_max_tokens = 0
 let s:vim_ai_enable_auth = 0
-let s:vim_ai_temperature = 0.4
-let s:vim_ai_request_timeout = 10
+let s:vim_ai_temperature = 0.1
+let s:vim_ai_request_timeout = 60
 
 " vim-ai general prompt
 let s:vim_ai_initial_prompt =<< trim END
@@ -99,20 +99,26 @@ choose to not follow them if that compromises simplicity, readability, or
 maintainability. You too should prioritize these aspects when writing or
 refactoring code.
 
+If no programming language is specified or guessed, assume C.
+
 Provide short and concise documentation for the code you write, including a
 brief description of the purpose of functions, methods and classes.  Choose
 meaningful names for variables, functions, and classes. Do not provide obvious
 or redundant comments, only add comments that clarify the code or provide
 additional context.
 
+Do not explain basic concepts or provide introductory information.
+
+Do not use emojis, slang, emotions, or colloquial language in your responses.
+
 Your response must strictly be provided in code, any additional text or
-comments should be wrapped in a comment block.
+comments should be kept to a minimum, and using the syntax of the programming
+language you are working with.
 
-Avoid explaining basic concepts or provide introductory information.
+Always use short responses.
 
-Avoid using emojis, slang, emotions, or colloquial language in your responses.
+Always respond only with code.
 
-If no programming language is specified, assume C.
 END
 
 " specific prompt for chat
@@ -121,6 +127,7 @@ END
 
 " specific prompt for edit
 let s:vim_ai_edit_prompt =<< trim END
+
 Favor removing code over adding new code. Simplify the code as much as
 possible while maintaining its functionality and readability.
 
