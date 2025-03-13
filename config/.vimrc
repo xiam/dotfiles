@@ -119,6 +119,10 @@ Always use short responses.
 
 Always respond only with code.
 
+If you're asked to write test cases, write them in the same language as the
+code you're working on, provide different test cases for different scenarios,
+and add edge cases to ensure the code is robust and handles unexpected inputs.
+
 END
 
 " specific prompt for chat
