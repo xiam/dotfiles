@@ -64,17 +64,18 @@ filetype plugin on
 let g:arduino_dir = "$HOME/opt/arduino"
 
 " vim-ai with local LLM
-let s:vim_ai_endpoint_url = "http://make1.hub:11434/v1/chat/completions"
+let s:vim_ai_endpoint_url = "https://ollama.local.xiam.dev/v1/chat/completions"
 
-let s:vim_ai_model_chat = "codegemma:7b"
-let s:vim_ai_model_edit = "granite-code:20b"
-let s:vim_ai_model_complete = "codegemma:2b"
+let s:vim_ai_model_chat = "gemma3:27b"
+let s:vim_ai_model_edit = "codellama:34b"
+let s:vim_ai_model_complete = "codellama:34b"
 
 " vim-ai default settings
 let s:vim_ai_max_tokens = 0
+let s:vim_ai_max_completion_tokens = 0
 let s:vim_ai_enable_auth = 0
 let s:vim_ai_temperature = 0.1
-let s:vim_ai_request_timeout = 60
+let s:vim_ai_request_timeout = 40
 
 " vim-ai general prompt
 let s:vim_ai_initial_prompt =<< trim END
@@ -144,42 +145,52 @@ END
 
 " specific prompt for complete
 let s:vim_ai_complete_prompt =<< trim END
+You are a code completion AI. You are asked to provide code completions for
+the given prompt. Your responses should be short and concise, and should
+strictly be provided in code. Do not provide additional text or comments, only
+respond with code.
 END
 
 let s:vim_ai_initial_chat_prompt = join([s:vim_ai_initial_prompt, s:vim_ai_chat_prompt], "\n")
 let s:vim_ai_initial_edit_prompt = join([s:vim_ai_initial_prompt, s:vim_ai_edit_prompt], "\n")
 let s:vim_ai_initial_complete_prompt = join([s:vim_ai_initial_prompt, s:vim_ai_complete_prompt], "\n")
 
+" :AIChat
 let s:vim_ai_chat_config = #{
 \  engine: "chat",
+\  prompt: "",
 \  options: #{
 \    model: s:vim_ai_model_chat,
 \    temperature: s:vim_ai_temperature,
 \    endpoint_url: s:vim_ai_endpoint_url,
 \    enable_auth: s:vim_ai_enable_auth,
 \    max_tokens: s:vim_ai_max_tokens,
+\    max_completion_tokens: s:vim_ai_max_completion_tokens,
 \    stream: 1,
+\    selection_boundary: "#####",
 \    initial_prompt: s:vim_ai_initial_chat_prompt,
 \    request_timeout: s:vim_ai_request_timeout,
 \  },
 \  ui: #{
-\    open_chat_command: "preset_right",
+\    open_chat_command: "preset_below",
 \    scratch_buffer_keep_open: 1,
+\    code_syntax_enabled: 1,
 \    paste_mode: 1,
-\    code_syntax_enabled: 0,
 \  },
 \}
 
+" :AIEdit
 let s:vim_ai_edit_config = #{
 \  engine: "chat",
+\  prompt: "",
 \  options: #{
 \    model: s:vim_ai_model_edit,
 \    temperature: s:vim_ai_temperature,
 \    endpoint_url: s:vim_ai_endpoint_url,
 \    enable_auth: s:vim_ai_enable_auth,
 \    max_tokens: s:vim_ai_max_tokens,
+\    max_completion_tokens: s:vim_ai_max_completion_tokens,
 \    stream: 1,
-\    selection_boundary: "#####",
 \    initial_prompt: s:vim_ai_initial_edit_prompt,
 \    request_timeout: s:vim_ai_request_timeout,
 \  },
@@ -189,7 +200,9 @@ let s:vim_ai_edit_config = #{
 \  },
 \}
 
+" :AI
 let s:vim_ai_complete_config = #{
+\  prompt: "",
 \  engine: "chat",
 \  options: #{
 \    model: s:vim_ai_model_complete,
@@ -197,6 +210,7 @@ let s:vim_ai_complete_config = #{
 \    endpoint_url: s:vim_ai_endpoint_url,
 \    enable_auth: s:vim_ai_enable_auth,
 \    max_tokens: s:vim_ai_max_tokens,
+\    max_completion_tokens: s:vim_ai_max_completion_tokens,
 \    stream: 1,
 \    initial_prompt: s:vim_ai_initial_complete_prompt,
 \    request_timeout: s:vim_ai_request_timeout,
@@ -209,3 +223,7 @@ let s:vim_ai_complete_config = #{
 let g:vim_ai_chat = s:vim_ai_chat_config
 let g:vim_ai_complete = s:vim_ai_complete_config
 let g:vim_ai_edit = s:vim_ai_edit_config
+
+let g:vim_ai_roles_config_file = '~/.config/vim-ai/roles.ini'
+
+nnoremap <C-J> :AIChat<CR>
