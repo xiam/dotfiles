@@ -70,10 +70,10 @@ let s:vim_ai_general_endpoint_url = "https://ollama-distilled.local.xiam.dev/v1/
 let s:vim_ai_model_chat = "gemma3:27b"
 let s:vim_ai_model_chat_endpoint_url = s:vim_ai_general_endpoint_url
 
-let s:vim_ai_model_edit = "qwen2.5-coder:32b"
+let s:vim_ai_model_edit = "qwen2.5-coder:14b"
 let s:vim_ai_model_edit_endpoint_url = s:vim_ai_coder_endpoint_url
 
-let s:vim_ai_model_complete = "qwen2.5-coder:32b"
+let s:vim_ai_model_complete = "qwen2.5-coder:14b"
 let s:vim_ai_model_complete_endpoint_url = s:vim_ai_coder_endpoint_url
 
 " vim-ai default settings
