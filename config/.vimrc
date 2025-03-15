@@ -64,11 +64,17 @@ filetype plugin on
 let g:arduino_dir = "$HOME/opt/arduino"
 
 " vim-ai with local LLM
-let s:vim_ai_endpoint_url = "https://ollama.local.xiam.dev/v1/chat/completions"
+let s:vim_ai_coder_endpoint_url = "https://ollama-coder.local.xiam.dev/v1/chat/completions"
+let s:vim_ai_general_endpoint_url = "https://ollama-distilled.local.xiam.dev/v1/chat/completions"
 
 let s:vim_ai_model_chat = "gemma3:27b"
-let s:vim_ai_model_edit = "codellama:34b"
-let s:vim_ai_model_complete = "codellama:34b"
+let s:vim_ai_model_chat_endpoint_url = s:vim_ai_general_endpoint_url
+
+let s:vim_ai_model_edit = "qwen2.5-coder:32b"
+let s:vim_ai_model_edit_endpoint_url = s:vim_ai_coder_endpoint_url
+
+let s:vim_ai_model_complete = "qwen2.5-coder:32b"
+let s:vim_ai_model_complete_endpoint_url = s:vim_ai_coder_endpoint_url
 
 " vim-ai default settings
 let s:vim_ai_max_tokens = 0
@@ -162,7 +168,7 @@ let s:vim_ai_chat_config = #{
 \  options: #{
 \    model: s:vim_ai_model_chat,
 \    temperature: s:vim_ai_temperature,
-\    endpoint_url: s:vim_ai_endpoint_url,
+\    endpoint_url: s:vim_ai_model_chat_endpoint_url,
 \    enable_auth: s:vim_ai_enable_auth,
 \    max_tokens: s:vim_ai_max_tokens,
 \    max_completion_tokens: s:vim_ai_max_completion_tokens,
@@ -186,7 +192,7 @@ let s:vim_ai_edit_config = #{
 \  options: #{
 \    model: s:vim_ai_model_edit,
 \    temperature: s:vim_ai_temperature,
-\    endpoint_url: s:vim_ai_endpoint_url,
+\    endpoint_url: s:vim_ai_model_edit_endpoint_url,
 \    enable_auth: s:vim_ai_enable_auth,
 \    max_tokens: s:vim_ai_max_tokens,
 \    max_completion_tokens: s:vim_ai_max_completion_tokens,
@@ -207,7 +213,7 @@ let s:vim_ai_complete_config = #{
 \  options: #{
 \    model: s:vim_ai_model_complete,
 \    temperature: s:vim_ai_temperature,
-\    endpoint_url: s:vim_ai_endpoint_url,
+\    endpoint_url: s:vim_ai_model_complete_endpoint_url,
 \    enable_auth: s:vim_ai_enable_auth,
 \    max_tokens: s:vim_ai_max_tokens,
 \    max_completion_tokens: s:vim_ai_max_completion_tokens,
