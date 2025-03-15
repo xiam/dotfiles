@@ -1,4 +1,4 @@
-# My (dot)files
+# dotfiles
 
 The settings I use for development.
 
@@ -11,7 +11,6 @@ This is my preferred stack:
 
 I have been using these tools for a long time and I am very happy with them.
 Nothing fancy, just what I need and works for me.
-
 
 ## Installation
 
