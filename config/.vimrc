@@ -140,11 +140,11 @@ let s:vim_ai_chat_config = #{
 \    request_timeout: s:vim_ai_request_timeout,
 \  },
 \  ui: #{
-\    open_chat_command: "preset_right",
+\    open_chat_command: "preset_tab",
 \    scratch_buffer_keep_open: 0,
 \    code_syntax_enabled: 1,
 \    populate_options: 0,
-\    force_new_chat: 1,
+\    force_new_chat: 0,
 \    paste_mode: 1,
 \  },
 \}
