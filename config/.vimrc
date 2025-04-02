@@ -63,7 +63,7 @@ filetype plugin on
 
 let g:arduino_dir = "$HOME/opt/arduino"
 
-" vim-ai with local LLM
+" vim-ai with LLMs by default
 let s:vim_ai_coder_endpoint_url = "https://ollama-coder.local.xiam.dev/v1/chat/completions"
 let s:vim_ai_general_endpoint_url = "https://ollama-distilled.local.xiam.dev/v1/chat/completions"
 
@@ -83,83 +83,45 @@ let s:vim_ai_enable_auth = 0
 let s:vim_ai_temperature = 0.1
 let s:vim_ai_request_timeout = 40
 
-" vim-ai general prompt
+" vim-ai general prompt.
 let s:vim_ai_initial_prompt =<< trim END
 >>> system
+You are a programming assistant that writes code.
+Ensure the response is in plain text without any Markdown or special formatting
+If no programming language is provided, assume Python.
+END
 
-Your name is Cool, Joe Cool.
-
-You are an expert programmer with years of experience in writing, refactoring,
-and optimizing code. Your primary focus is to write or refactor code in a way
-that is clear, human-readable, and adheres to best practices. You avoid overly
-clever or ‘leet’ code and prioritize simplicity and maintainability.  Use
-meaningful and explicit variable names, ensuring the code is easy to
-understand for any programmer. Follow industry standards and conventions for
-the given language, and always consider the readability and practicality of
-the solution over unnecessary complexity. When providing refactored code, add
-concise comments if needed to clarify your reasoning or explain non-obvious
-sections of the code.
-
-Assume you are teaming with an experienced programmer who is familiar with
-most of the common programming concepts and best practices, but who might
-choose to not follow them if that compromises simplicity, readability, or
-maintainability. You too should prioritize these aspects when writing or
-refactoring code.
-
-If no programming language is specified or guessed, assume C.
-
-Provide short and concise documentation for the code you write, including a
-brief description of the purpose of functions, methods and classes.  Choose
-meaningful names for variables, functions, and classes. Do not provide obvious
-or redundant comments, only add comments that clarify the code or provide
-additional context.
-
-Do not explain basic concepts or provide introductory information.
-
-Do not use emojis, slang, emotions, or colloquial language in your responses.
-
-Your response must strictly be provided in code, any additional text or
-comments should be kept to a minimum, and using the syntax of the programming
-language you are working with.
-
-Always use short responses.
-
-Always respond only with code.
-
-If you're asked to write test cases, write them in the same language as the
-code you're working on, provide different test cases for different scenarios,
-and add edge cases to ensure the code is robust and handles unexpected inputs.
-
+" specific lines for code-related prompts
+let s:vim_ai_code_prompt =<< trim END
+Generate code in plain text format without any Markdown or explanations.
+Do not add comments or explanations before or after the code.
+Do not summarize your response.
+Do not add an introductory sentence.
+Do not add concluding remarks.
+Do not provide context.
+If you absolutely must provide context use the syntax for in-line code comments.
+All of your response must be raw code, without using code fences (```) or any other formatting.
+```
 END
 
 " specific prompt for chat
-let s:vim_ai_chat_prompt =<< trim END
+let s:vim_ai_chat_specific_prompt =<< trim END
+I will present you with a code snippet, or with a prompt, and you will chat about it.
 END
 
 " specific prompt for edit
-let s:vim_ai_edit_prompt =<< trim END
-
-Favor removing code over adding new code. Simplify the code as much as
-possible while maintaining its functionality and readability.
-
-Avoid refactoring code that is already readable, maintainable, and clear.
-
-Avoid using markdown tags in your responses.
-
-Do not wrap your responses with "```" or "~~~" tags.
+let s:vim_ai_edit_specific_prompt =<< trim END
+I will present you with a code snippet, and you will edit it following the instructions provided.
 END
 
 " specific prompt for complete
-let s:vim_ai_complete_prompt =<< trim END
-You are a code completion AI. You are asked to provide code completions for
-the given prompt. Your responses should be short and concise, and should
-strictly be provided in code. Do not provide additional text or comments, only
-respond with code.
+let s:vim_ai_complete_specific_prompt =<< trim END
+I will present you with a code snippet, or with a prompt, and you will complete it.
 END
 
-let s:vim_ai_initial_chat_prompt = join([s:vim_ai_initial_prompt, s:vim_ai_chat_prompt], "\n")
-let s:vim_ai_initial_edit_prompt = join([s:vim_ai_initial_prompt, s:vim_ai_edit_prompt], "\n")
-let s:vim_ai_initial_complete_prompt = join([s:vim_ai_initial_prompt, s:vim_ai_complete_prompt], "\n")
+let s:vim_ai_chat_prompt = join([s:vim_ai_initial_prompt, s:vim_ai_chat_specific_prompt], "\n")
+let s:vim_ai_edit_prompt = join([s:vim_ai_initial_prompt, s:vim_ai_edit_specific_prompt, s:vim_ai_code_prompt], "\n")
+let s:vim_ai_complete_prompt = join([s:vim_ai_initial_prompt, s:vim_ai_complete_specific_prompt, s:vim_ai_code_prompt], "\n")
 
 " :AIChat
 let s:vim_ai_chat_config = #{
@@ -173,14 +135,16 @@ let s:vim_ai_chat_config = #{
 \    max_tokens: s:vim_ai_max_tokens,
 \    max_completion_tokens: s:vim_ai_max_completion_tokens,
 \    stream: 1,
-\    selection_boundary: "#####",
-\    initial_prompt: s:vim_ai_initial_chat_prompt,
+\    selection_boundary: "```",
+\    initial_prompt: s:vim_ai_chat_prompt,
 \    request_timeout: s:vim_ai_request_timeout,
 \  },
 \  ui: #{
-\    open_chat_command: "preset_below",
-\    scratch_buffer_keep_open: 1,
+\    open_chat_command: "preset_right",
+\    scratch_buffer_keep_open: 0,
 \    code_syntax_enabled: 1,
+\    populate_options: 0,
+\    force_new_chat: 1,
 \    paste_mode: 1,
 \  },
 \}
@@ -197,12 +161,12 @@ let s:vim_ai_edit_config = #{
 \    max_tokens: s:vim_ai_max_tokens,
 \    max_completion_tokens: s:vim_ai_max_completion_tokens,
 \    stream: 1,
-\    initial_prompt: s:vim_ai_initial_edit_prompt,
+\    selection_boundary: "```",
+\    initial_prompt: s:vim_ai_edit_prompt,
 \    request_timeout: s:vim_ai_request_timeout,
 \  },
 \  ui: #{
 \    paste_mode: 1,
-\    code_syntax_enabled: 1,
 \  },
 \}
 
@@ -218,7 +182,8 @@ let s:vim_ai_complete_config = #{
 \    max_tokens: s:vim_ai_max_tokens,
 \    max_completion_tokens: s:vim_ai_max_completion_tokens,
 \    stream: 1,
-\    initial_prompt: s:vim_ai_initial_complete_prompt,
+\    selection_boundary: "```",
+\    initial_prompt: s:vim_ai_complete_prompt,
 \    request_timeout: s:vim_ai_request_timeout,
 \  },
 \  ui: #{
@@ -231,5 +196,8 @@ let g:vim_ai_complete = s:vim_ai_complete_config
 let g:vim_ai_edit = s:vim_ai_edit_config
 
 let g:vim_ai_roles_config_file = '~/.config/vim-ai/roles.ini'
+
+"let g:vim_ai_debug = 1
+"let g:vim_ai_debug_log_file = "/tmp/vim_ai_debug.log"
 
 nnoremap <C-J> :AIChat<CR>
