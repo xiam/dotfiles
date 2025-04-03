@@ -100,18 +100,14 @@ if [ -f $HOME/.nix-profile/etc/profile.d/nix.sh ]; then
   . $HOME/.nix-profile/etc/profile.d/nix.sh
 fi
 
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/tmp/google-cloud-sdk/path.zsh.inc' ]; then
-  . '/tmp/google-cloud-sdk/path.zsh.inc';
-fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f '/tmp/google-cloud-sdk/completion.zsh.inc' ]; then
-  . '/tmp/google-cloud-sdk/completion.zsh.inc';
-fi
-
 if [ -f "$HOME/.cargo/env" ]; then
   source "$HOME/.cargo/env"
 fi
 
 bindkey -e
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/opt/google-cloud-sdk/path.zsh.inc' ]; then . '/opt/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/opt/google-cloud-sdk/completion.zsh.inc' ]; then . '/opt/google-cloud-sdk/completion.zsh.inc'; fi
