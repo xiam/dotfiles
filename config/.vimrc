@@ -81,7 +81,7 @@ let s:vim_ai_max_tokens = 0
 let s:vim_ai_max_completion_tokens = 0
 let s:vim_ai_enable_auth = 0
 let s:vim_ai_temperature = 0.1
-let s:vim_ai_request_timeout = 40
+let s:vim_ai_request_timeout = 120
 
 " vim-ai general prompt.
 let s:vim_ai_initial_prompt =<< trim END
@@ -197,7 +197,8 @@ let g:vim_ai_edit = s:vim_ai_edit_config
 
 let g:vim_ai_roles_config_file = '~/.config/vim-ai/roles.ini'
 
+let g:vim_ai_debug_log_file = "/tmp/vim_ai_debug.log"
+
 "let g:vim_ai_debug = 1
-"let g:vim_ai_debug_log_file = "/tmp/vim_ai_debug.log"
 
 nnoremap <C-J> :AIChat<CR>
