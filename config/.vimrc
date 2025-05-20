@@ -1,9 +1,10 @@
 execute pathogen#infect()
+
 syntax on
 
 set encoding=utf-8
 set ruler
-set nowrap
+" set nowrap
 set nowrapscan
 
 set ai
@@ -14,7 +15,7 @@ set bs=2
 
 set binary
 set ruler
-set history=200
+set history=512
 set showcmd
 
 set expandtab
@@ -28,6 +29,9 @@ set shortmess=a
 set hlsearch
 
 set noswapfile
+
+set wrap linebreak breakindent showbreak=↪\
+" set textwidth=80
 
 nnoremap <C-T> :tabnew<CR>:e .<CR>
 nnoremap <C-P> :tabprev<CR>
@@ -198,7 +202,6 @@ let g:vim_ai_edit = s:vim_ai_edit_config
 let g:vim_ai_roles_config_file = '~/.config/vim-ai/roles.ini'
 
 let g:vim_ai_debug_log_file = "/tmp/vim_ai_debug.log"
-
 "let g:vim_ai_debug = 1
 
 nnoremap <C-J> :AIChat<CR>
