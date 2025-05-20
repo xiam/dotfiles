@@ -30,7 +30,7 @@ set hlsearch
 
 set noswapfile
 
-set wrap linebreak breakindent showbreak=↪\
+set wrap linebreak breakindent showbreak=↪\ "
 " set textwidth=80
 
 nnoremap <C-T> :tabnew<CR>:e .<CR>
