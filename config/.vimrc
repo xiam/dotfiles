@@ -68,17 +68,16 @@ filetype plugin on
 let g:arduino_dir = "$HOME/opt/arduino"
 
 " vim-ai with LLMs by default
-let s:vim_ai_coder_endpoint_url = "https://ollama-coder.local.xiam.dev/v1/chat/completions"
-let s:vim_ai_general_endpoint_url = "https://ollama-distilled.local.xiam.dev/v1/chat/completions"
+let s:vim_ai_general_endpoint_url = "https://ollama.local.xiam.dev/v1/chat/completions"
 
-let s:vim_ai_model_chat = "gemma3:27b"
+let s:vim_ai_model_chat = "phi4-mini:3.8b"
 let s:vim_ai_model_chat_endpoint_url = s:vim_ai_general_endpoint_url
 
-let s:vim_ai_model_edit = "qwen2.5-coder:14b"
-let s:vim_ai_model_edit_endpoint_url = s:vim_ai_coder_endpoint_url
+let s:vim_ai_model_edit = s:vim_ai_model_chat
+let s:vim_ai_model_edit_endpoint_url = s:vim_ai_general_endpoint_url
 
-let s:vim_ai_model_complete = "qwen2.5-coder:14b"
-let s:vim_ai_model_complete_endpoint_url = s:vim_ai_coder_endpoint_url
+let s:vim_ai_model_complete = s:vim_ai_model_chat
+let s:vim_ai_model_complete_endpoint_url = s:vim_ai_general_endpoint_url
 
 " vim-ai default settings
 let s:vim_ai_max_tokens = 0
@@ -89,38 +88,39 @@ let s:vim_ai_request_timeout = 120
 
 " vim-ai general prompt.
 let s:vim_ai_initial_prompt =<< trim END
->>> system
-You are a programming assistant that writes code.
-Ensure the response is in plain text without any Markdown or special formatting
-If no programming language is provided, assume Python.
+You are a programming assistant that helps with coding tasks.
+Ensure your responses are clear, concise, and directly address the user's query.
+When providing code, use plain text without Markdown formatting unless specifically requested.
+If no programming language is specified, assume Python.
 END
 
 " specific lines for code-related prompts
 let s:vim_ai_code_prompt =<< trim END
-Generate code in plain text format without any Markdown or explanations.
-Do not add comments or explanations before or after the code.
-Do not summarize your response.
-Do not add an introductory sentence.
-Do not add concluding remarks.
-Do not provide context.
-If you absolutely must provide context use the syntax for in-line code comments.
-All of your response must be raw code, without using code fences (```) or any other formatting.
-```
+Generate code in plain text format without Markdown formatting.
+Do not include explanatory text before or after the code.
+Do not use code fences (```) or other formatting markers.
+If context is necessary, use language-appropriate inline comments.
+Your entire response should be valid, executable code.
 END
 
 " specific prompt for chat
 let s:vim_ai_chat_specific_prompt =<< trim END
-I will present you with a code snippet, or with a prompt, and you will chat about it.
+I will present you with code or a question, and you should provide helpful analysis, explanations, or answers.
+Feel free to use formatting to enhance readability when explaining concepts.
 END
 
 " specific prompt for edit
 let s:vim_ai_edit_specific_prompt =<< trim END
-I will present you with a code snippet, and you will edit it following the instructions provided.
+I will present you with code that needs modification based on specific instructions.
+Return the complete modified code, preserving the structure and style of the original.
+Highlight or comment on the changes you've made.
 END
 
 " specific prompt for complete
 let s:vim_ai_complete_specific_prompt =<< trim END
-I will present you with a code snippet, or with a prompt, and you will complete it.
+I will provide partial code or a description of what needs to be implemented.
+Complete the code in a way that is consistent with the existing style and logic.
+Ensure the completed code is functional and follows best practices.
 END
 
 let s:vim_ai_chat_prompt = join([s:vim_ai_initial_prompt, s:vim_ai_chat_specific_prompt], "\n")
