@@ -78,7 +78,6 @@ let s:vim_ai_model_complete = s:vim_ai_model_chat
 let s:vim_ai_max_tokens = 0
 let s:vim_ai_max_completion_tokens = 0
 let s:vim_ai_enable_auth = 1
-let s:vim_ai_temperature = 0.1
 let s:vim_ai_request_timeout = 120
 
 " vim-ai general prompt.
@@ -128,7 +127,6 @@ let s:vim_ai_chat_config = #{
 \  prompt: "",
 \  options: #{
 \    model: s:vim_ai_model_chat,
-\    temperature: s:vim_ai_temperature,
 \    endpoint_url: s:vim_ai_general_endpoint_url,
 \    enable_auth: s:vim_ai_enable_auth,
 \    token_file_path: s:vim_ai_token_file_path,
@@ -155,7 +153,6 @@ let s:vim_ai_edit_config = #{
 \  prompt: "",
 \  options: #{
 \    model: s:vim_ai_model_edit,
-\    temperature: s:vim_ai_temperature,
 \    endpoint_url: s:vim_ai_general_endpoint_url,
 \    enable_auth: s:vim_ai_enable_auth,
 \    token_file_path: s:vim_ai_token_file_path,
@@ -177,7 +174,6 @@ let s:vim_ai_complete_config = #{
 \  engine: "chat",
 \  options: #{
 \    model: s:vim_ai_model_complete,
-\    temperature: s:vim_ai_temperature,
 \    endpoint_url: s:vim_ai_general_endpoint_url,
 \    enable_auth: s:vim_ai_enable_auth,
 \    token_file_path: s:vim_ai_token_file_path,
