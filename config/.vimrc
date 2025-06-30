@@ -67,22 +67,17 @@ filetype plugin on
 
 let g:arduino_dir = "$HOME/opt/arduino"
 
-" vim-ai with LLMs by default
-let s:vim_ai_general_endpoint_url = "https://ollama.local.xiam.dev/v1/chat/completions"
+let s:vim_ai_general_endpoint_url = "https://litellm.local.xiam.dev/v1/chat/completions"
+let s:vim_ai_token_file_path = "~/.config/litellm.token"
 
-let s:vim_ai_model_chat = "phi4-mini:3.8b"
-let s:vim_ai_model_chat_endpoint_url = s:vim_ai_general_endpoint_url
-
+let s:vim_ai_model_chat = "openai/o4-mini"
 let s:vim_ai_model_edit = s:vim_ai_model_chat
-let s:vim_ai_model_edit_endpoint_url = s:vim_ai_general_endpoint_url
-
 let s:vim_ai_model_complete = s:vim_ai_model_chat
-let s:vim_ai_model_complete_endpoint_url = s:vim_ai_general_endpoint_url
 
 " vim-ai default settings
 let s:vim_ai_max_tokens = 0
 let s:vim_ai_max_completion_tokens = 0
-let s:vim_ai_enable_auth = 0
+let s:vim_ai_enable_auth = 1
 let s:vim_ai_temperature = 0.1
 let s:vim_ai_request_timeout = 120
 
@@ -134,8 +129,9 @@ let s:vim_ai_chat_config = #{
 \  options: #{
 \    model: s:vim_ai_model_chat,
 \    temperature: s:vim_ai_temperature,
-\    endpoint_url: s:vim_ai_model_chat_endpoint_url,
+\    endpoint_url: s:vim_ai_general_endpoint_url,
 \    enable_auth: s:vim_ai_enable_auth,
+\    token_file_path: s:vim_ai_token_file_path,
 \    max_tokens: s:vim_ai_max_tokens,
 \    max_completion_tokens: s:vim_ai_max_completion_tokens,
 \    stream: 1,
@@ -160,8 +156,9 @@ let s:vim_ai_edit_config = #{
 \  options: #{
 \    model: s:vim_ai_model_edit,
 \    temperature: s:vim_ai_temperature,
-\    endpoint_url: s:vim_ai_model_edit_endpoint_url,
+\    endpoint_url: s:vim_ai_general_endpoint_url,
 \    enable_auth: s:vim_ai_enable_auth,
+\    token_file_path: s:vim_ai_token_file_path,
 \    max_tokens: s:vim_ai_max_tokens,
 \    max_completion_tokens: s:vim_ai_max_completion_tokens,
 \    stream: 1,
@@ -181,8 +178,9 @@ let s:vim_ai_complete_config = #{
 \  options: #{
 \    model: s:vim_ai_model_complete,
 \    temperature: s:vim_ai_temperature,
-\    endpoint_url: s:vim_ai_model_complete_endpoint_url,
+\    endpoint_url: s:vim_ai_general_endpoint_url,
 \    enable_auth: s:vim_ai_enable_auth,
+\    token_file_path: s:vim_ai_token_file_path,
 \    max_tokens: s:vim_ai_max_tokens,
 \    max_completion_tokens: s:vim_ai_max_completion_tokens,
 \    stream: 1,
@@ -201,7 +199,7 @@ let g:vim_ai_edit = s:vim_ai_edit_config
 
 let g:vim_ai_roles_config_file = '~/.config/vim-ai/roles.ini'
 
-let g:vim_ai_debug_log_file = "/tmp/vim_ai_debug.log"
+"let g:vim_ai_debug_log_file = "/tmp/vim_ai_debug.log"
 "let g:vim_ai_debug = 1
 
 nnoremap <C-J> :AIChat<CR>
