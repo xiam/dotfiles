@@ -199,3 +199,11 @@ let g:vim_ai_roles_config_file = '~/.config/vim-ai/roles.ini'
 "let g:vim_ai_debug = 1
 
 nnoremap <C-J> :AIChat<CR>
+
+command! -range -nargs=* O3      AIChat /o3 <args>
+command! -range -nargs=* O4      AIChat /o4 <args>
+command! -range -nargs=* Claude  AIChat /claude <args>
+command! -range -nargs=* Opus    AIChat /opus <args>
+command! -range -nargs=* Gemini  AIChat /gemini <args>
+command! -range -nargs=* Qwen    AIChat /qwen <args>
+command! -range -nargs=* Phi     AIChat /phi <args>
