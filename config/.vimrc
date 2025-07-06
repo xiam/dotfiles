@@ -67,7 +67,7 @@ filetype plugin on
 
 let g:arduino_dir = "$HOME/opt/arduino"
 
-let s:vim_ai_general_endpoint_url = "https://litellm.local.xiam.dev/v1/chat/completions"
+let s:vim_ai_endpoint_url = "https://litellm.local.xiam.dev/v1/chat/completions"
 let s:vim_ai_token_file_path = "~/.config/litellm.token"
 
 let s:vim_ai_model_chat = "openai/o4-mini"
@@ -81,7 +81,7 @@ let s:vim_ai_enable_auth = 1
 let s:vim_ai_request_timeout = 120
 
 " vim-ai general prompt.
-let s:vim_ai_initial_prompt =<< trim END
+let s:vim_ai_prompt =<< trim END
 You are a programming assistant that helps with coding tasks.
 Ensure your responses are clear, concise, and directly address the user's query.
 When providing code, use plain text without Markdown formatting unless specifically requested.
@@ -117,9 +117,9 @@ Complete the code in a way that is consistent with the existing style and logic.
 Ensure the completed code is functional and follows best practices.
 END
 
-let s:vim_ai_chat_prompt = join([s:vim_ai_initial_prompt, s:vim_ai_chat_specific_prompt], "\n")
-let s:vim_ai_edit_prompt = join([s:vim_ai_initial_prompt, s:vim_ai_edit_specific_prompt, s:vim_ai_code_prompt], "\n")
-let s:vim_ai_complete_prompt = join([s:vim_ai_initial_prompt, s:vim_ai_complete_specific_prompt, s:vim_ai_code_prompt], "\n")
+let s:vim_ai_chat_prompt = join([s:vim_ai_prompt, s:vim_ai_chat_specific_prompt], "\n")
+let s:vim_ai_edit_prompt = join([s:vim_ai_prompt, s:vim_ai_edit_specific_prompt, s:vim_ai_code_prompt], "\n")
+let s:vim_ai_prompt_complete = join([s:vim_ai_prompt, s:vim_ai_complete_specific_prompt, s:vim_ai_code_prompt], "\n")
 
 " :AIChat
 let s:vim_ai_chat_config = #{
@@ -127,19 +127,19 @@ let s:vim_ai_chat_config = #{
 \  prompt: "",
 \  options: #{
 \    model: s:vim_ai_model_chat,
-\    endpoint_url: s:vim_ai_general_endpoint_url,
+\    endpoint_url: s:vim_ai_endpoint_url,
 \    enable_auth: s:vim_ai_enable_auth,
 \    token_file_path: s:vim_ai_token_file_path,
 \    max_tokens: s:vim_ai_max_tokens,
 \    max_completion_tokens: s:vim_ai_max_completion_tokens,
 \    stream: 1,
-\    selection_boundary: "```",
+\    selection_boundary: "#####",
 \    initial_prompt: s:vim_ai_chat_prompt,
 \    request_timeout: s:vim_ai_request_timeout,
 \  },
 \  ui: #{
 \    open_chat_command: "preset_tab",
-\    scratch_buffer_keep_open: 0,
+\    scratch_buffer_keep_open: 1,
 \    code_syntax_enabled: 1,
 \    populate_options: 0,
 \    force_new_chat: 0,
@@ -153,13 +153,13 @@ let s:vim_ai_edit_config = #{
 \  prompt: "",
 \  options: #{
 \    model: s:vim_ai_model_edit,
-\    endpoint_url: s:vim_ai_general_endpoint_url,
+\    endpoint_url: s:vim_ai_endpoint_url,
 \    enable_auth: s:vim_ai_enable_auth,
 \    token_file_path: s:vim_ai_token_file_path,
 \    max_tokens: s:vim_ai_max_tokens,
 \    max_completion_tokens: s:vim_ai_max_completion_tokens,
 \    stream: 1,
-\    selection_boundary: "```",
+\    selection_boundary: "#####",
 \    initial_prompt: s:vim_ai_edit_prompt,
 \    request_timeout: s:vim_ai_request_timeout,
 \  },
@@ -174,14 +174,14 @@ let s:vim_ai_complete_config = #{
 \  engine: "chat",
 \  options: #{
 \    model: s:vim_ai_model_complete,
-\    endpoint_url: s:vim_ai_general_endpoint_url,
+\    endpoint_url: s:vim_ai_endpoint_url,
 \    enable_auth: s:vim_ai_enable_auth,
 \    token_file_path: s:vim_ai_token_file_path,
 \    max_tokens: s:vim_ai_max_tokens,
 \    max_completion_tokens: s:vim_ai_max_completion_tokens,
 \    stream: 1,
-\    selection_boundary: "```",
-\    initial_prompt: s:vim_ai_complete_prompt,
+\    selection_boundary: "#####",
+\    initial_prompt: s:vim_ai_prompt_complete,
 \    request_timeout: s:vim_ai_request_timeout,
 \  },
 \  ui: #{
@@ -198,12 +198,13 @@ let g:vim_ai_roles_config_file = '~/.config/vim-ai/roles.ini'
 "let g:vim_ai_debug_log_file = "/tmp/vim_ai_debug.log"
 "let g:vim_ai_debug = 1
 
+" Ctrl + J to open AI chat
 nnoremap <C-J> :AIChat<CR>
 
-command! -range -nargs=* O3      AIChat /o3 <args>
-command! -range -nargs=* O4      AIChat /o4 <args>
-command! -range -nargs=* Claude  AIChat /claude <args>
-command! -range -nargs=* Opus    AIChat /opus <args>
-command! -range -nargs=* Gemini  AIChat /gemini <args>
-command! -range -nargs=* Qwen    AIChat /qwen <args>
-command! -range -nargs=* Phi     AIChat /phi <args>
+command! -range -nargs=* O3      <line1>,<line2>AIChat /o3 <args>
+command! -range -nargs=* O4      <line1>,<line2>AIChat /o4 <args>
+command! -range -nargs=* Claude  <line1>,<line2>AIChat /claude <args>
+command! -range -nargs=* Opus    <line1>,<line2>AIChat /opus <args>
+command! -range -nargs=* Gemini  <line1>,<line2>AIChat /gemini <args>
+command! -range -nargs=* Qwen    <line1>,<line2>AIChat /qwen <args>
+command! -range -nargs=* Phi     <line1>,<line2>AIChat /phi <args>
