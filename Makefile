@@ -45,6 +45,7 @@ deps:
 
 config-vim:
 	if [ -L ~/.vim ]; then rm ~/.vim; fi
+	find ~/.vim -xtype l -delete
 	@$(call link_file,config/.vimrc,~/.vimrc)
 	@$(call link_subfiles,config/.vim/autoload,~/.vim/autoload)
 	@$(call link_subdirectories,config/.vim/bundle,~/.vim/bundle)
