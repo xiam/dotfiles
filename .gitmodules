@@ -1,18 +1,6 @@
-[submodule "config/.vim/bundle/vim-svelte"]
-	path = config/.vim/bundle/vim-svelte
-	url = https://github.com/evanleck/vim-svelte
-[submodule "config/.vim/bundle/vim-processing"]
-	path = config/.vim/bundle/vim-processing
-	url = https://github.com/sophacles/vim-processing
-[submodule "config/.vim/bundle/vim-arduino"]
-	path = config/.vim/bundle/vim-arduino
-	url = https://github.com/stevearc/vim-arduino
 [submodule "config/.vim/bundle/vim-prettier"]
 	path = config/.vim/bundle/vim-prettier
 	url = https://github.com/prettier/vim-prettier
-[submodule "config/.vim/bundle/typescript-vim"]
-	path = config/.vim/bundle/typescript-vim
-	url = https://github.com/leafgarland/typescript-vim.git
 [submodule "config/.vim/bundle/rust.vim"]
 	path = config/.vim/bundle/rust.vim
 	url = https://github.com/rust-lang/rust.vim.git
