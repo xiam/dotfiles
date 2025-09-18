@@ -276,3 +276,78 @@ function! LoadAllBuffersToAI()
 endfunction
 
 nnoremap <leader>aM :call LoadAllBuffersToAI()<CR>
+
+" <leader>aD -> AI Review diff: Review unstaged changes
+" <leader>aS -> AI Review staged: Review staged changes
+function! ReviewGitDiff(staged)
+  " Get the appropriate diff
+  if a:staged
+    let diff_output = system('git diff --cached ' . shellescape(expand('%:p')))
+    let diff_type = "staged changes"
+  else
+    let diff_output = system('git diff ' . shellescape(expand('%:p')))
+    let diff_type = "unstaged changes"
+  endif
+
+  " Check if there's actually a diff
+  if empty(trim(diff_output))
+    echo "No " . diff_type . " to review in this file"
+    return
+  endif
+
+  " Check for git errors
+  if v:shell_error != 0
+    echo "Error getting git diff. Is this file in a git repository?"
+    return
+  endif
+
+  " Build the prompt with the diff
+  let prompt = "Review the following git " . diff_type . " for the file `" . GetRelativePath() . "`:\n\n"
+  let prompt .= "```diff\n" . diff_output . "\n```\n\n"
+  let prompt .= "Please provide:\n"
+  let prompt .= "1. Potential bugs or issues\n"
+  let prompt .= "2. Code improvement suggestions\n"
+  let prompt .= "3. Any security concerns\n"
+  let prompt .= "Be concise and specific."
+
+  " Send to AI
+  execute 'AIChat ' . escape(prompt, '"')
+endfunction
+
+nnoremap <leader>aD :call ReviewGitDiff(0)<CR>
+nnoremap <leader>aS :call ReviewGitDiff(1)<CR>
+
+" <leader>aG -> AI Git review: Review ALL uncommitted changes in the repo
+function! ReviewAllGitChanges()
+  let diff_output = system('git diff')
+
+  if empty(trim(diff_output))
+    echo "No uncommitted changes in the repository"
+    return
+  endif
+
+  if v:shell_error != 0
+    echo "Error getting git diff. Are you in a git repository?"
+    return
+  endif
+
+  " For large diffs, warn the user
+  let line_count = len(split(diff_output, '\n'))
+  if line_count > 500
+    let confirm = input('Large diff (' . line_count . ' lines). Continue? (y/n): ')
+    if confirm != 'y'
+      return
+    endif
+  endif
+
+  let prompt = "Review all uncommitted changes in this repository and provide a summary:\n\n"
+  let prompt .= "```diff\n" . diff_output . "\n```\n\n"
+  let prompt .= "Provide:\n"
+  let prompt .= "1. Summary of changes\n"
+  let prompt .= "2. Any potential issues\n"
+  let prompt .= "3. Suggested commit message\n"
+
+  execute 'AIChat ' . escape(prompt, '"')
+endfunction
+
+nnoremap <leader>aG :call ReviewAllGitChanges()<CR>
