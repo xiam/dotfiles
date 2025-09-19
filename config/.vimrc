@@ -4,7 +4,6 @@ syntax on
 
 set encoding=utf-8
 set ruler
-" set nowrap
 set nowrapscan
 
 set ai
@@ -33,7 +32,6 @@ set noswapfile
 set autochdir
 
 set wrap linebreak breakindent showbreak=↪\ "
-" set textwidth=80
 
 nnoremap <C-T> :tabnew<CR>:e .<CR>
 nnoremap <C-P> :tabprev<CR>
@@ -211,7 +209,10 @@ function! GetRelativePath()
   let git_root = finddir('.git', expand('%:p:h') . ';')
   if !empty(git_root)
     let project_root = fnamemodify(git_root, ':h')
-    return substitute(expand('%:p'), '^' . project_root . '/', '', '')
+    " Use resolve() for symlinks and handle Windows paths
+    let full_path = resolve(expand('%:p'))
+    let root_path = resolve(project_root)
+    return substitute(full_path, '^' . escape(root_path, '\') . '[/\\]', '', '')
   else
     return expand('%:.') " Fallback for non-git directories
   endif
@@ -242,8 +243,8 @@ vnoremap <leader>ar :AIChat Review this code selection for potential issues and 
 " <leader>ac -> AI Complete (File) Review: Code review on the entire file.
 nnoremap <leader>ac :execute '%AIChat Perform a thorough code review of the following file (`' . GetRelativePath() . '`). Focus on critical problems first, then suggest improvements. Respond with a concise summary and a numbered list of findings.'<CR>
 
-" <leader>ak -> AI Continue: Continue generating from the last response.
-nnoremap <leader>ak :AIChat Please continue where you left off.<CR>
+" <leader>a. -> AI Continue: Continue generating from the last response.
+nnoremap <leader>a. :AIChat Please continue where you left off.<CR>
 
 " <leader>al -> AI Learn: Explain like I'm a beginner
 vnoremap <leader>al :AIChat Explain this code as if I'm a beginner programmer. Break it down step-by-step with simple terms:<CR>
@@ -262,23 +263,33 @@ function! LoadAllBuffersToAI()
     return
   endif
 
+  " Check total size to prevent overwhelming the AI
+  let total_size = 0
   for buf in buffers
-    let saved_buffer = bufnr('%')
-    execute 'buffer ' . buf
-    let filepath = GetRelativePath()
-    execute 'buffer ' . saved_buffer
+    let total_size += len(join(getbufline(buf, 1, '$'), "\n"))
+  endfor
 
+  if total_size > 100000
+    let confirm = input('Large context (' . total_size . ' chars). Continue? (y/n): ')
+    if confirm != 'y'
+      return
+    endif
+  endif
+
+  for buf in buffers
+    " Use getbufline without switching buffers
+    let filepath = fnamemodify(bufname(buf), ':.')
     let lines = getbufline(buf, 1, '$')
     let context .= "File: `" . filepath . "`\n\n#####\n" . join(lines, "\n") . "\n#####\n\n"
   endfor
 
-  execute 'AIChat ' . context . 'Describe how these files relate to each other and summarize their overall purpose. Be concise.'
+  execute 'AIChat ' . fnameescape(context . 'Describe how these files relate to each other and summarize their overall purpose. Be concise.')
 endfunction
 
 nnoremap <leader>aM :call LoadAllBuffersToAI()<CR>
 
-" <leader>aD -> AI Review diff: Review unstaged changes
-" <leader>aS -> AI Review staged: Review staged changes
+" <leader>ad -> AI Review diff: Review unstaged changes
+" <leader>aS -> AI Review staged: Review staged changes (capital S to avoid conflict)
 function! ReviewGitDiff(staged)
   " Get the appropriate diff
   if a:staged
@@ -290,7 +301,7 @@ function! ReviewGitDiff(staged)
   endif
 
   " Check if there's actually a diff
-  if empty(trim(diff_output))
+  if empty(diff_output)
     echo "No " . diff_type . " to review in this file"
     return
   endif
@@ -310,18 +321,18 @@ function! ReviewGitDiff(staged)
   let prompt .= "3. Any security concerns\n"
   let prompt .= "Be concise and specific."
 
-  " Send to AI
-  execute 'AIChat ' . escape(prompt, '"')
+  " Send to AI with proper escaping
+  execute 'AIChat ' . fnameescape(prompt)
 endfunction
 
-nnoremap <leader>aD :call ReviewGitDiff(0)<CR>
+nnoremap <leader>ad :call ReviewGitDiff(0)<CR>
 nnoremap <leader>aS :call ReviewGitDiff(1)<CR>
 
-" <leader>aG -> AI Git review: Review ALL uncommitted changes in the repo
+" <leader>aD -> AI Git review: Review ALL uncommitted changes in the repo
 function! ReviewAllGitChanges()
   let diff_output = system('git diff')
 
-  if empty(trim(diff_output))
+  if empty(diff_output)
     echo "No uncommitted changes in the repository"
     return
   endif
@@ -333,8 +344,9 @@ function! ReviewAllGitChanges()
 
   " For large diffs, warn the user
   let line_count = len(split(diff_output, '\n'))
-  if line_count > 500
-    let confirm = input('Large diff (' . line_count . ' lines). Continue? (y/n): ')
+  let char_count = len(diff_output)
+  if line_count > 500 || char_count > 50000
+    let confirm = input('Large diff (' . line_count . ' lines, ' . char_count . ' chars). Continue? (y/n): ')
     if confirm != 'y'
       return
     endif
@@ -347,7 +359,117 @@ function! ReviewAllGitChanges()
   let prompt .= "2. Any potential issues\n"
   let prompt .= "3. Suggested commit message\n"
 
-  execute 'AIChat ' . escape(prompt, '"')
+  execute 'AIChat ' . fnameescape(prompt)
 endfunction
 
-nnoremap <leader>aG :call ReviewAllGitChanges()<CR>
+nnoremap <leader>aD :call ReviewAllGitChanges()<CR>
+
+" <leader>aq -> AI Question: Ask for a professional opinion
+vnoremap <leader>aq :AIChat What do you think about this draft?<CR>
+nnoremap <leader>aq :execute '%AIChat What do you think about the draft in this file (`' . GetRelativePath() . '`)?'<CR>
+
+" Model selection mappings - using AI namespace to avoid conflicts
+" <leader>aC -> Chat with Claude model
+nnoremap <leader>aC :AIChat /claude<Space>
+vnoremap <leader>aC :AIChat /claude<Space>
+
+" <leader>aO -> Chat with OpenAI model
+nnoremap <leader>aO :AIChat /openai<Space>
+vnoremap <leader>aO :AIChat /openai<Space>
+
+" <leader>aG -> Chat with Gemini model
+nnoremap <leader>aG :AIChat /gemini<Space>
+vnoremap <leader>aG :AIChat /gemini<Space>
+
+" <leader>aL -> Chat with LLaMA model
+nnoremap <leader>aL :AIChat /llama<Space>
+vnoremap <leader>aL :AIChat /llama<Space>
+
+" <leader>ax -> Stop the current AI response
+nnoremap <leader>ax :AIStopChat<CR>
+vnoremap <leader>ax :AIStopChat<CR>
+
+" <leader>a, -> Rerun the last AI command
+nnoremap <leader>a, :AIRedo<CR>
+vnoremap <leader>a, :AIRedo<CR>
+
+" ============================================================================
+" Help Command - Shows all available AI mappings
+" ============================================================================
+
+function! ShowAIHelp()
+  " Create a new scratch buffer for the help content
+  new
+  setlocal buftype=nofile bufhidden=wipe noswapfile nowrap
+  setlocal filetype=markdown
+
+  " Add the help content
+  let help_text = [
+    \ '# vim-ai Key Mappings Help',
+    \ '',
+    \ '## Quick Access',
+    \ '`<C-J>`         Open AI chat (normal) / Explain selection (visual)',
+    \ '',
+    \ '## File Operations',
+    \ '`<leader>af`    **A**I **F**ile - Summarize entire file',
+    \ '`<leader>ac`    **A**I **C**omplete review - Full code review of file',
+    \ '`<leader>aR`    **A**I **R**efactor - Refactor file/selection for readability',
+    \ '',
+    \ '## Selection Operations (Visual Mode)',
+    \ '`<leader>as`    **A**I **S**election - Summarize selected code',
+    \ '`<leader>ae`    **A**I **E**xplain - Explain selection in detail',
+    \ '`<leader>ar`    **A**I **r**eview - Review selected code',
+    \ '`<leader>al`    **A**I **L**earn - Explain like I''m a beginner',
+    \ '`<leader>av`    **A**I **V**alidate - Check for security issues',
+    \ '`<leader>aq`    **A**I **Q**uestion - Get opinion on draft',
+    \ '',
+    \ '## Git Integration',
+    \ '`<leader>ad`    **A**I **d**iff - Review unstaged changes in file',
+    \ '`<leader>aS`    **A**I **S**taged - Review staged changes in file',
+    \ '`<leader>aD`    **A**I **D**iff all - Review ALL uncommitted changes',
+    \ '',
+    \ '## Multi-File Context',
+    \ '`<leader>aM`    **A**I **M**ulti - Load all open buffers for context',
+    \ '',
+    \ '## Model Selection',
+    \ '`<leader>aC`    Chat with **C**laude',
+    \ '`<leader>aO`    Chat with **O**penAI',
+    \ '`<leader>aG`    Chat with **G**emini',
+    \ '`<leader>aL`    Chat with **L**LaMA',
+    \ '',
+    \ '## Control Commands',
+    \ '`<leader>a.`    Continue last response',
+    \ '`<leader>a,`    Redo last AI command',
+    \ '`<leader>ax`    Stop current AI response',
+    \ '',
+    \ '## Close Help',
+    \ 'Press `q` to close this help window',
+    \ ]
+
+  " Insert the help text
+  call setline(1, help_text)
+
+  " Set cursor at the top and make buffer non-modifiable
+  normal! gg
+  setlocal nomodifiable
+
+  " Map 'q' to close the help buffer
+  nnoremap <buffer> q :close<CR>
+
+  " Set nice colors if available
+  if has('syntax')
+    syntax match AIHelpHeader /^#.*/
+    syntax match AIHelpKey /`[^`]*`/
+    syntax match AIHelpBold /\*\*[^*]*\*\*/
+
+    hi def link AIHelpHeader Title
+    hi def link AIHelpKey Identifier
+    hi def link AIHelpBold Statement
+  endif
+endfunction
+
+" Command to show help
+command! AIHelp call ShowAIHelp()
+
+" Mapping to show help
+nnoremap <leader>ah :AIHelp<CR>
