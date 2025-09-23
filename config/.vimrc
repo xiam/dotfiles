@@ -1,9 +1,9 @@
+
 execute pathogen#infect()
 
 syntax on
 
 set encoding=utf-8
-set ruler
 set nowrapscan
 
 set ai
@@ -28,8 +28,6 @@ set shortmess=a
 set hlsearch
 
 set noswapfile
-
-set autochdir
 
 set wrap linebreak breakindent showbreak=↪\ "
 
@@ -70,11 +68,11 @@ let g:arduino_dir = "$HOME/opt/arduino"
 let s:vim_ai_endpoint_url = "https://litellm.local.xiam.dev/v1/chat/completions"
 let s:vim_ai_token_file_path = "~/.config/litellm.token"
 
-"let s:vim_ai_model_chat = "gemini/gemini-2.5-flash"
+let s:vim_ai_default_model = "gemini/gemini-2.5-flash"
 
-let s:vim_ai_model_chat = "anthropic/claude-3-7-sonnet-20250219"
-let s:vim_ai_model_edit = s:vim_ai_model_chat
-let s:vim_ai_model_complete = s:vim_ai_model_chat
+let s:vim_ai_model_chat = s:vim_ai_default_model
+let s:vim_ai_model_edit = s:vim_ai_default_model
+let s:vim_ai_model_complete = s:vim_ai_default_model
 
 " vim-ai default settings
 let s:vim_ai_max_tokens = 0
@@ -236,8 +234,8 @@ vnoremap <leader>as :AIChat Analyze this selection and provide a one-sentence su
 vnoremap <leader>ae :AIChat Explain the following code in detail:<CR>
 
 " <leader>aR -> AI Refactor: Refactor this code selection
-vnoremap <leader>aR :AIChat Refactor this code selection for better readability, feel free to use vertical space. Do not change anything else.<CR>
-nnoremap <leader>aR :execute '%AIChat Refactor this file (`' . GetRelativePath() . '`) for better readability. Break long lines, use vertical space, and improve structure. Do not change functionality or variable names.'<CR>
+vnoremap <leader>aR :AIChat Refactor this code selection for better readability, feel free to use vertical space. Remove superfluous comments, keep only those that are useful. Do not change anything else.<CR>
+nnoremap <leader>aR :execute '%AIChat Refactor this file (`' . GetRelativePath() . '`) for better readability. Break long lines, use vertical space, and improve structure. Remove superfluous comments, keep only those that are useful. Do not change functionality or variable names.'<CR>
 
 " <leader>ar -> AI Review (Selection): Code review on the selection.
 vnoremap <leader>ar :AIChat Review this code selection for potential issues and improvements. Respond with a concise summary and a numbered list of issues and suggestions.<CR>
@@ -285,7 +283,7 @@ function! LoadAllBuffersToAI()
     let context .= "File: `" . filepath . "`\n\n#####\n" . join(lines, "\n") . "\n#####\n\n"
   endfor
 
-  execute 'AIChat ' . fnameescape(context . 'Describe how these files relate to each other and summarize their overall purpose. Be concise.')
+  execute 'AIChat ' . context . 'Describe how these files relate to each other and summarize their overall purpose. Be concise.'
 endfunction
 
 nnoremap <leader>aM :call LoadAllBuffersToAI()<CR>
@@ -324,7 +322,7 @@ function! ReviewGitDiff(staged)
   let prompt .= "Be concise and specific."
 
   " Send to AI with proper escaping
-  execute 'AIChat ' . fnameescape(prompt)
+  execute 'AIChat ' . prompt
 endfunction
 
 nnoremap <leader>ad :call ReviewGitDiff(0)<CR>
@@ -361,7 +359,7 @@ function! ReviewAllGitChanges()
   let prompt .= "2. Any potential issues\n"
   let prompt .= "3. Suggested commit message\n"
 
-  execute 'AIChat ' . fnameescape(prompt)
+  execute 'AIChat ' . prompt
 endfunction
 
 nnoremap <leader>aD :call ReviewAllGitChanges()<CR>
@@ -395,10 +393,7 @@ vnoremap <leader>ax :AIStopChat<CR>
 nnoremap <leader>a, :AIRedo<CR>
 vnoremap <leader>a, :AIRedo<CR>
 
-" ============================================================================
-" Help Command - Shows all available AI mappings
-" ============================================================================
-
+" <leader>ah -> Show help for key mappings
 function! ShowAIHelp()
   " Create a new scratch buffer for the help content
   new
