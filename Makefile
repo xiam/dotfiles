@@ -7,6 +7,7 @@ all: deps \
 	config-git \
 	config-tmux \
 	config-zsh \
+	config-ghostty \
 	config-misc
 
 define link
@@ -66,3 +67,6 @@ config-tmux:
 config-misc:
 	if [ -L ~/.config ]; then rm ~/.config; fi
 	@$(call link_subdirectories,config/.config,~/.config)
+
+config-ghostty:
+	tic -x ./third-party/xterm-ghostty.terminfo
