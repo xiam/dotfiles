@@ -68,7 +68,7 @@ let g:arduino_dir = "$HOME/opt/arduino"
 let s:vim_ai_endpoint_url = "https://litellm.local.xiam.dev/v1/chat/completions"
 let s:vim_ai_token_file_path = "~/.config/litellm.token"
 
-let s:vim_ai_default_model = "gemini/gemini-2.5-flash"
+let s:vim_ai_default_model = "anthropic/claude-haiku-4-5"
 
 let s:vim_ai_model_chat = s:vim_ai_default_model
 let s:vim_ai_model_edit = s:vim_ai_default_model
