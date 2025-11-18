@@ -1,4 +1,3 @@
-
 execute pathogen#infect()
 
 syntax on
@@ -470,3 +469,6 @@ command! AIHelp call ShowAIHelp()
 
 " Mapping to show help
 nnoremap <leader>ah :AIHelp<CR>
+
+" Replace entire buffer with yanked content
+nnoremap <leader>ap :%d _<CR>"0P
