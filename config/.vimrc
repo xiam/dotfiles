@@ -64,7 +64,7 @@ filetype plugin on
 
 let g:arduino_dir = "$HOME/opt/arduino"
 
-let s:vim_ai_endpoint_url = "https://litellm.local.xiam.dev/v1/chat/completions"
+let s:vim_ai_endpoint_url = "https://litellm.internal.xiam.dev/v1/chat/completions"
 let s:vim_ai_token_file_path = "~/.config/litellm.token"
 
 let s:vim_ai_default_model = "anthropic/claude-haiku-4-5"
