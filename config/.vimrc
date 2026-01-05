@@ -1,6 +1,7 @@
 execute pathogen#infect()
 
 syntax on
+colorscheme tokyo-night
 
 set encoding=utf-8
 set nowrapscan

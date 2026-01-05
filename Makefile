@@ -50,6 +50,7 @@ config-vim:
 	find ~/.vim -xtype l -delete
 	@$(call link_file,config/.vimrc,~/.vimrc)
 	@$(call link_subfiles,config/.vim/autoload,~/.vim/autoload)
+	@$(call link_subfiles,config/.vim/colors,~/.vim/colors)
 	@$(call link_subdirectories,config/.vim/bundle,~/.vim/bundle)
 	@$(call link_subdirectories,config/.vim/pack/ai/start,~/.vim/pack/ai/start)
 
