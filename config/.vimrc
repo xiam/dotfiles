@@ -1,17 +1,17 @@
 execute pathogen#infect()
 
 syntax on
+colorscheme tokyo-night
 
 set encoding=utf-8
 set nowrapscan
 
 set ai
-set modeline
+set nomodeline
 set number
 
 set bs=2
 
-set binary
 set ruler
 set history=512
 set showcmd
@@ -30,16 +30,37 @@ set noswapfile
 
 set wrap linebreak breakindent showbreak=↪\ "
 
+" Tabs
 nnoremap <C-T> :tabnew<CR>:e .<CR>
 nnoremap <C-P> :tabprev<CR>
 nnoremap <C-N> :tabnext<CR>
-nnoremap <C-V> :vsplit .<CR>
-nnoremap <C-H> :split .<CR>
+
+" Splits (| vertical, - horizontal, matching tmux)
+nnoremap <C-W>\| :vsplit .<CR>
+nnoremap <C-W>- :split .<CR>
+
+" Navigate splits with Ctrl+h/j/k/l
+nnoremap <C-h> <C-W>h
+nnoremap <C-j> <C-W>j
+nnoremap <C-k> <C-W>k
+nnoremap <C-l> <C-W>l
+
+" Quick close
 nnoremap <C-Q> :q<CR>
+
+" Escape insert mode with jk
+inoremap jk <Esc>
+
+" Quick save
+nnoremap <leader>w :w<CR>
+
+" Clear search highlighting
+nnoremap <leader>/ :nohlsearch<CR>
 
 au BufNewFile,BufRead Makefile*,*.go set noexpandtab
 
-au BufWritePost *.go !go fmt <afile>
+au BufWritePost *.go silent !goimports -w <afile> || go fmt <afile>
+au BufWritePost *.go redraw!
 
 au BufNewFile,BufRead *.thtml setfiletype php
 au BufNewFile,BufRead *.tpl setfiletype php

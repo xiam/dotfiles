@@ -1,0 +1,70 @@
+# Tokyo Night theme for btop
+# Matches tmux and zsh prompt colors
+
+# Main background and text
+theme[main_bg]="#1a1b26"
+theme[main_fg]="#a9b1d6"
+
+# Title and highlighted text
+theme[title]="#a9b1d6"
+theme[hi_fg]="#7aa2f7"
+
+# Selected/highlighted background
+theme[selected_bg]="#3b4261"
+theme[selected_fg]="#a9b1d6"
+
+# Inactive/disabled text
+theme[inactive_fg]="#565f89"
+
+# Process box
+theme[proc_misc]="#7aa2f7"
+
+# Box outlines
+theme[cpu_box]="#7aa2f7"
+theme[mem_box]="#bb9af7"
+theme[net_box]="#7dcfff"
+theme[proc_box]="#9ece6a"
+
+# Graphs
+theme[graph_text]="#565f89"
+
+# CPU colors
+theme[cpu_start]="#7aa2f7"
+theme[cpu_mid]="#bb9af7"
+theme[cpu_end]="#f7768e"
+
+# Memory colors
+theme[mem_used]="#bb9af7"
+theme[mem_buffers]="#e0af68"
+theme[mem_cached]="#7dcfff"
+theme[mem_free]="#565f89"
+
+# Network colors
+theme[download]="#7dcfff"
+theme[upload]="#bb9af7"
+
+# Process colors
+theme[process_start]="#9ece6a"
+theme[process_mid]="#e0af68"
+theme[process_end]="#f7768e"
+
+# Temperature
+theme[temp_start]="#9ece6a"
+theme[temp_mid]="#e0af68"
+theme[temp_end]="#f7768e"
+
+# Free/used meters
+theme[free_start]="#3b4261"
+theme[free_mid]="#565f89"
+theme[free_end]="#565f89"
+theme[used_start]="#7aa2f7"
+theme[used_mid]="#bb9af7"
+theme[used_end]="#f7768e"
+
+# Available/cached meters
+theme[available_start]="#9ece6a"
+theme[available_mid]="#e0af68"
+theme[available_end]="#f7768e"
+theme[cached_start]="#7dcfff"
+theme[cached_mid]="#7aa2f7"
+theme[cached_end]="#bb9af7"

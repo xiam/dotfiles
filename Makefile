@@ -16,7 +16,7 @@ define link
 	export DIRNAME=$$(dirname $$CONFIG_FILE) && \
 	echo "$1: $$CONFIG_FILE -> $$TARGET_FILE" && \
 	mkdir -p $$DIRNAME && \
-	rm -f $$CONFIG_FILE && \
+	rm -rf $$CONFIG_FILE && \
 	ln -sfn $$TARGET_FILE $$CONFIG_FILE
 endef
 
@@ -50,6 +50,7 @@ config-vim:
 	find ~/.vim -xtype l -delete
 	@$(call link_file,config/.vimrc,~/.vimrc)
 	@$(call link_subfiles,config/.vim/autoload,~/.vim/autoload)
+	@$(call link_subfiles,config/.vim/colors,~/.vim/colors)
 	@$(call link_subdirectories,config/.vim/bundle,~/.vim/bundle)
 	@$(call link_subdirectories,config/.vim/pack/ai/start,~/.vim/pack/ai/start)
 
