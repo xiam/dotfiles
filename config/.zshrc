@@ -25,12 +25,12 @@ zstyle ':completion:*' verbose true
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
 zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 
-# Minimal prompt with git branch
+# Minimal prompt with git branch (Tokyo Night colors)
 autoload -Uz vcs_info
 precmd() { vcs_info }
-zstyle ':vcs_info:git:*' formats ' (%b)'
+zstyle ':vcs_info:git:*' formats ' %F{cyan}(%b)%f'
 setopt PROMPT_SUBST
-PROMPT='%n@%m:%~${vcs_info_msg_0_}%# '
+PROMPT='%F{blue}%n%f@%F{magenta}%m%f:%F{blue}%~%f${vcs_info_msg_0_}%# '
 
 export LC_ALL=en_US.UTF-8
 
