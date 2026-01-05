@@ -1,6 +1,22 @@
 [user]
 	email = jose@xiam.io
 	name = José Nieto
+[init]
+	defaultBranch = main
+[rerere]
+	enabled = true
+[alias]
+	st = status -sb
+	co = checkout
+	br = branch
+	ci = commit
+	ca = commit --amend
+	lg = log --oneline --graph --decorate -20
+	lga = log --oneline --graph --decorate --all -20
+	df = diff
+	dfs = diff --staged
+	unstage = reset HEAD --
+	last = log -1 HEAD --stat
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
