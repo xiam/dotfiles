@@ -1,6 +1,7 @@
 execute pathogen#infect()
 
 syntax on
+set background=dark
 colorscheme tokyo-night
 
 set encoding=utf-8

@@ -1,14 +1,13 @@
 export SHELL := /bin/bash
 
-all: deps \
-	config-vim \
-	config-zsh \
-	config-arduino \
-	config-git \
-	config-tmux \
-	config-zsh \
-	config-ghostty \
-	config-misc
+all: deps
+	$(call check_cmd,vim,_config-vim)
+	$(call check_cmd,zsh,_config-zsh)
+	$(call check_cmd,arduino,_config-arduino)
+	$(call check_cmd,git,_config-git)
+	$(call check_cmd,tmux,_config-tmux)
+	$(call check_cmd,ghostty,_config-ghostty)
+	@$(MAKE) --no-print-directory _config-misc
 
 define link
 	export TARGET_FILE=$$PWD/$2 && \
@@ -40,11 +39,19 @@ define link_subdirectories
 	done
 endef
 
+define check_cmd
+	@if command -v $(1) >/dev/null 2>&1; then \
+		$(MAKE) --no-print-directory $(2); \
+	else \
+		echo "SKIP: $(1) not found, skipping $(2)"; \
+	fi
+endef
+
 deps:
 	git submodule init && \
 	git submodule update
 
-config-vim:
+_config-vim:
 	if [ -L ~/.vim ]; then rm ~/.vim; fi
 	mkdir -p ~/.vim
 	find ~/.vim -xtype l -delete
@@ -54,21 +61,42 @@ config-vim:
 	@$(call link_subdirectories,config/.vim/bundle,~/.vim/bundle)
 	@$(call link_subdirectories,config/.vim/pack/ai/start,~/.vim/pack/ai/start)
 
-config-zsh:
+_config-zsh:
 	@$(call link_file,config/.zshrc,~/.zshrc)
 
-config-arduino:
+_config-arduino:
 	@$(call link_directory,config/.arduino15,~/.arduino15)
 
-config-git:
+_config-git:
 	@$(call link_file,config/.gitconfig,~/.gitconfig)
 
-config-tmux:
+_config-tmux:
 	@$(call link_file,config/.tmux.conf,~/.tmux.conf)
 
-config-misc:
+_config-misc:
 	if [ -L ~/.config ]; then rm ~/.config; fi
 	@$(call link_subdirectories,config/.config,~/.config)
 
-config-ghostty:
+_config-ghostty:
 	tic -x ./third-party/xterm-ghostty.terminfo
+
+# Convenience targets with command checks
+config-vim:
+	$(call check_cmd,vim,_config-vim)
+
+config-zsh:
+	$(call check_cmd,zsh,_config-zsh)
+
+config-arduino:
+	$(call check_cmd,arduino,_config-arduino)
+
+config-git:
+	$(call check_cmd,git,_config-git)
+
+config-tmux:
+	$(call check_cmd,tmux,_config-tmux)
+
+config-ghostty:
+	$(call check_cmd,ghostty,_config-ghostty)
+
+config-misc: _config-misc
