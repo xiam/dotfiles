@@ -1,1 +1,11 @@
-theme = dark:Catppuccin Frappe,light:Catppuccin Latte
+font-family = Iosevka
+background-opacity = 1
+theme = ayu
+cursor-style = block
+cursor-style-blink = false
+cursor-color = #00ffff
+cursor-text = #0000ff
+cursor-opacity = 0.7
+link-url = true
+window-theme = dark
+auto-update = check
