@@ -131,9 +131,9 @@ config-secrets:
 		fi; \
 	fi
 	@echo "Installing secrets..."
-	@cd secrets && find . -type f | while read -r file; do \
-		src="$$PWD/secrets/$${file#./}"; \
-		dest="$$HOME/$${file#./}"; \
+	@find secrets -type f | while read -r file; do \
+		src="$$PWD/$$file"; \
+		dest="$$HOME/$${file#secrets/}"; \
 		dir=$$(dirname "$$dest"); \
 		mkdir -p "$$dir"; \
 		rm -f "$$dest"; \
