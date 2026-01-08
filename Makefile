@@ -124,9 +124,20 @@ config-secrets:
 		exit 0; \
 	fi
 	@if [ ! -d secrets ]; then \
-		echo "Decrypting secrets..."; \
-		if ! openssl enc -aes-256-cbc -pbkdf2 -d -in secrets.tar.gz.enc | tar xzf -; then \
-			echo "SKIP: Failed to decrypt secrets (wrong password or cancelled)"; \
+		if [ -n "$$DOTFILES_SECRETS_PASS" ]; then \
+			echo "Decrypting secrets (using DOTFILES_SECRETS_PASS)..."; \
+			if ! echo "$$DOTFILES_SECRETS_PASS" | openssl enc -aes-256-cbc -pbkdf2 -d -pass stdin -in secrets.tar.gz.enc | tar xzf -; then \
+				echo "SKIP: Failed to decrypt secrets (wrong password)"; \
+				exit 0; \
+			fi; \
+		elif [ -t 0 ]; then \
+			echo "Decrypting secrets..."; \
+			if ! openssl enc -aes-256-cbc -pbkdf2 -d -in secrets.tar.gz.enc | tar xzf -; then \
+				echo "SKIP: Failed to decrypt secrets (wrong password or cancelled)"; \
+				exit 0; \
+			fi; \
+		else \
+			echo "SKIP: Non-interactive mode, set DOTFILES_SECRETS_PASS to decrypt secrets"; \
 			exit 0; \
 		fi; \
 	fi
