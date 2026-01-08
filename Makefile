@@ -8,6 +8,7 @@ all: deps
 	$(call check_cmd,tmux,_config-tmux)
 	$(call check_cmd,ghostty,_config-ghostty)
 	@$(MAKE) --no-print-directory _config-misc
+	@$(MAKE) --no-print-directory config-secrets
 
 define link
 	export TARGET_FILE=$$PWD/$2 && \
@@ -100,3 +101,42 @@ config-ghostty:
 	$(call check_cmd,ghostty,_config-ghostty)
 
 config-misc: _config-misc
+
+secrets-encrypt:
+	@if [ ! -d secrets ]; then \
+		echo "ERROR: secrets/ directory not found"; \
+		exit 1; \
+	fi
+	tar czf - secrets | openssl enc -aes-256-cbc -pbkdf2 -out secrets.tar.gz.enc
+	@echo "Encrypted secrets/ -> secrets.tar.gz.enc"
+
+secrets-decrypt:
+	@if [ ! -f secrets.tar.gz.enc ]; then \
+		echo "ERROR: secrets.tar.gz.enc not found"; \
+		exit 1; \
+	fi
+	openssl enc -aes-256-cbc -pbkdf2 -d -in secrets.tar.gz.enc | tar xzf -
+	@echo "Decrypted secrets.tar.gz.enc -> secrets/"
+
+config-secrets:
+	@if [ ! -f secrets.tar.gz.enc ]; then \
+		echo "SKIP: secrets.tar.gz.enc not found"; \
+		exit 0; \
+	fi
+	@if [ ! -d secrets ]; then \
+		echo "Decrypting secrets..."; \
+		if ! openssl enc -aes-256-cbc -pbkdf2 -d -in secrets.tar.gz.enc | tar xzf -; then \
+			echo "SKIP: Failed to decrypt secrets (wrong password or cancelled)"; \
+			exit 0; \
+		fi; \
+	fi
+	@echo "Installing secrets..."
+	@find secrets -type f | while read -r file; do \
+		src="$$PWD/$$file"; \
+		dest="$$HOME/$${file#secrets/}"; \
+		dir=$$(dirname "$$dest"); \
+		mkdir -p "$$dir"; \
+		rm -f "$$dest"; \
+		ln -sfn "$$src" "$$dest"; \
+		echo "S: $$dest -> $$src"; \
+	done
