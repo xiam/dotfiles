@@ -135,3 +135,47 @@ Prefix: `Ctrl+B`
 | `git dfs` | `diff --staged` |
 | `git unstage` | `reset HEAD --` |
 | `git last` | `log -1 HEAD --stat` |
+
+## Secrets
+
+Sensitive files (tokens, credentials, etc.) can be stored encrypted in the repo.
+
+### Adding secrets
+
+1. Create the `secrets/` directory:
+   ```
+   mkdir -p secrets
+   ```
+
+2. Add your sensitive files, mirroring the home directory structure:
+   ```
+   secrets/
+   ├── .ssh/
+   │   └── config
+   ├── .netrc
+   └── .config/
+       └── gh/
+           └── hosts.yml
+   ```
+
+3. Encrypt the bundle:
+   ```
+   make secrets-encrypt
+   ```
+   You'll be prompted for a password. Remember it.
+
+4. Commit the encrypted bundle:
+   ```
+   git add secrets.tar.gz.enc
+   git commit -m "Update secrets"
+   ```
+
+### Decrypting on a new machine
+
+```
+make secrets-decrypt
+```
+
+Enter the same password used during encryption. Files will be extracted to `secrets/`.
+
+Note: The `secrets/` directory is gitignored. Only `secrets.tar.gz.enc` is committed.
