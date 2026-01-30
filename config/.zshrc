@@ -36,6 +36,11 @@ export LC_ALL=en_US.UTF-8
 
 export VAGRANT_DEFAULT_PROVIDER=virtualbox
 
+# Homebrew
+if [ -d "/opt/homebrew/bin" ]; then
+  export PATH="/opt/homebrew/bin:$PATH"
+fi
+
 # Go
 export GOPATH=$HOME/go
 if [ -d "/usr/local/go" ]; then
