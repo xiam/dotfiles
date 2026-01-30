@@ -6,7 +6,7 @@ all: deps
 	$(call check_cmd,arduino,_config-arduino)
 	$(call check_cmd,git,_config-git)
 	$(call check_cmd,tmux,_config-tmux)
-	$(call check_cmd,ghostty,_config-ghostty)
+	@$(MAKE) --no-print-directory _config-ghostty
 	@$(MAKE) --no-print-directory _config-misc
 	@$(MAKE) --no-print-directory config-secrets
 
@@ -97,8 +97,7 @@ config-git:
 config-tmux:
 	$(call check_cmd,tmux,_config-tmux)
 
-config-ghostty:
-	$(call check_cmd,ghostty,_config-ghostty)
+config-ghostty: _config-ghostty
 
 config-misc: _config-misc
 
