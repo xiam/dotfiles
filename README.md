@@ -1,181 +1,65 @@
-# dotfiles
+# Workstation dotfiles
 
-The settings I use for development.
+Vim, tmux, and Zsh settings for Linux, macOS, and WSL2.
+Tested on Linux; macOS and WSL2 have not been tested. Native Windows shells
+are not supported.
 
-This is my preferred stack:
+## Install
 
-* [zsh](http://www.zsh.org/)
-* [vim](http://www.vim.org/)
-* [tmux](http://tmux.sourceforge.net/)
-* [git](http://git-scm.com/)
+Requires Vim 9.0+, tmux 3.2+, Zsh 5.8+, Python 3.10+, Git, and Make.
+Install these with your package manager first.
 
-I have been using these tools for a long time and I am very happy with them.
-Nothing fancy, just what I need and works for me.
-
-## Installation
-
-```
+```sh
 git clone https://github.com/xiam/dotfiles.git
 cd dotfiles
-make
+make doctor
+make install
 ```
 
-## Quick Reference
+`make doctor` checks your tools. `make install` links the settings without
+downloading software or decrypting secrets. Conflicting personal files stay in
+place: move a reported conflict yourself, then rerun installation.
+Existing application settings and local overrides are preserved.
 
-### Vim
+Optional Vim plugins: `make plugins && make install` explicitly downloads and
+links the pinned packages.
 
-#### Tabs
+## Format in Vim
 
-| Key | Action |
-|-----|--------|
-| `Ctrl+T` | New tab (with file browser) |
-| `Ctrl+N` | Next tab |
-| `Ctrl+P` | Previous tab |
+Run `:Format` to format the current buffer. Install the tools you need:
 
-#### Splits
+| Language | Formatter, in preference order |
+|---|---|
+| Go | goimports, gofmt |
+| Rust | rustfmt |
+| Python | Ruff, Black |
+| JS/TS/JSX/TSX, YAML, JSON, Markdown | Prettier |
 
-| Key | Action |
-|-----|--------|
-| `Ctrl+W \|` | Vertical split |
-| `Ctrl+W -` | Horizontal split |
-| `Ctrl+h/j/k/l` | Navigate splits (left/down/up/right) |
-| `Ctrl+W p` | Previous split (last accessed) |
-| `Ctrl+Q` | Close split |
+Project-local tools and configuration are supported. Formatters are never
+downloaded automatically. Missing tools or formatter errors leave the buffer
+unchanged. Formatting on save is off by default.
 
-#### Editing
+## Local settings
 
-| Key | Action |
-|-----|--------|
-| `jk` | Escape insert mode |
-| `<Space>w` | Quick save |
-| `<Space>/` | Clear search highlight |
-| `u` | Undo |
-| `Ctrl+R` | Redo |
+Put machine-specific settings in these files; they load last:
 
-#### vim-ai
+- `~/.vimrc.local`
+- `~/.tmux.conf.local`
+- `~/.zshrc.local`
+- `~/.gitconfig.local` — set your Git identity here.
 
-| Key | Action |
-|-----|--------|
-| `Ctrl+J` | Open AI chat / Explain selection |
-| `<Space>af` | Summarize file |
-| `<Space>ar` | Review selection |
-| `<Space>aR` | Refactor file/selection |
-| `<Space>ad` | Review unstaged diff |
-| `<Space>aS` | Review staged diff |
-| `<Space>aC` | Chat with Claude |
-| `<Space>aG` | Chat with Gemini |
-| `<Space>ax` | Stop AI response |
-| `<Space>ah` | Show all AI keybindings |
+## Secrets (optional)
 
-### Tmux
+Requires OpenSSL. Keep plaintext in the gitignored `secrets/` directory using
+home-relative paths.
 
-Prefix: `Ctrl+B`
+- `make secrets-encrypt` — create or replace `secrets.tar.gz.enc`.
+- `make secrets-install` — decrypt and link files into your home.
+- `make secrets-decrypt` — extract locally without installing.
 
-#### Windows
+These commands prompt for a password. Existing credentials or plaintext are
+not overwritten; failed decryption installs nothing. Normal installation never
+asks for a password.
 
-| Key | Action |
-|-----|--------|
-| `prefix c` | New window |
-| `prefix n` | Next window |
-| `prefix p` | Previous window |
-| `Alt+1-9` | Jump to window (no prefix) |
-| `prefix &` | Kill window |
-
-#### Panes
-
-| Key | Action |
-|-----|--------|
-| `prefix \|` or `%` | Split vertical |
-| `prefix -` or `"` | Split horizontal |
-| `Alt+h/j/k/l` | Navigate panes (no prefix) |
-| `Alt+arrows` | Navigate panes (no prefix) |
-| `prefix ;` | Previous pane (last active) |
-| `prefix o` | Next pane (cycle) |
-| `prefix H/J/K/L` | Resize panes |
-| `prefix z` | Toggle pane zoom |
-| `prefix S` | Sync panes (type in all) |
-| `prefix x` | Kill pane |
-
-#### Session
-
-| Key | Action |
-|-----|--------|
-| `prefix d` | Detach session |
-| `prefix s` | List sessions |
-| `prefix $` | Rename session |
-
-#### Other
-
-| Key | Action |
-|-----|--------|
-| `prefix r` | Reload config |
-| `prefix m/M` | Mouse ON/OFF |
-
-#### Copy mode (vi)
-
-| Key | Action |
-|-----|--------|
-| `prefix [` | Enter copy mode |
-| `v` | Begin selection |
-| `y` | Copy and exit |
-| `q` | Exit copy mode |
-
-### Git
-
-| Alias | Command |
-|-------|---------|
-| `git st` | `status -sb` |
-| `git co` | `checkout` |
-| `git br` | `branch` |
-| `git ci` | `commit` |
-| `git ca` | `commit --amend` |
-| `git lg` | `log --oneline --graph` |
-| `git lga` | `log --oneline --graph --all` |
-| `git df` | `diff` |
-| `git dfs` | `diff --staged` |
-| `git unstage` | `reset HEAD --` |
-| `git last` | `log -1 HEAD --stat` |
-
-## Secrets
-
-Sensitive files (tokens, credentials, etc.) can be stored encrypted in the repo.
-
-### Adding secrets
-
-1. Create the `secrets/` directory:
-   ```
-   mkdir -p secrets
-   ```
-
-2. Add your sensitive files, mirroring the home directory structure:
-   ```
-   secrets/
-   ├── .ssh/
-   │   └── config
-   ├── .netrc
-   └── .config/
-       └── gh/
-           └── hosts.yml
-   ```
-
-3. Encrypt the bundle:
-   ```
-   make secrets-encrypt
-   ```
-   You'll be prompted for a password. Remember it.
-
-4. Commit the encrypted bundle:
-   ```
-   git add secrets.tar.gz.enc
-   git commit -m "Update secrets"
-   ```
-
-### Decrypting on a new machine
-
-```
-make secrets-decrypt
-```
-
-Enter the same password used during encryption. Files will be extracted to `secrets/`.
-
-Note: The `secrets/` directory is gitignored. Only `secrets.tar.gz.enc` is committed.
+See the [setup and customization guide](docs/README.md) for package examples,
+themes, save-time formatting, alternate homes, and smoke checks.
