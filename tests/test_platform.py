@@ -186,9 +186,10 @@ class PlatformTests(unittest.TestCase):
 
     def test_missing_optional_tools_are_reported_without_installing(self) -> None:
         doctor_path = os.pathsep.join((str(Path(sys.executable).parent), "/usr/bin", "/bin"))
-        doctor = subprocess.run([sys.executable, str(ROOT / "scripts/doctor.py")], env={"PATH": doctor_path}, capture_output=True, text=True)
-        self.assertEqual(doctor.returncode, 0, doctor.stderr)
-        self.assertIn("Optional formatter tools", doctor.stdout)
+        with tempfile.TemporaryDirectory(prefix="doctor home ") as home:
+            doctor = subprocess.run([sys.executable, str(ROOT / "scripts/doctor.py")], env={"PATH": doctor_path, "HOME": home}, capture_output=True, text=True)
+        self.assertEqual(doctor.returncode, 1, doctor.stderr)
+        self.assertIn("Default formatter tools", doctor.stdout)
         self.assertIn("Optional applications", doctor.stdout)
         self.assertIn("not found prettier", doctor.stdout)
         self.assertNotIn("apt install", doctor.stdout)

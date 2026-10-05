@@ -1,34 +1,35 @@
 SHELL := /bin/sh
+DOTFILES_HOME ?= $(HOME)
 
 .PHONY: all install doctor render plugins terminfo secrets-encrypt secrets-decrypt secrets-install test
 
 all: install
 
 install:
-	python3 scripts/install.py
+	sh scripts/bootstrap.sh
 
 doctor:
-	python3 scripts/doctor.py
+	sh scripts/python.sh scripts/doctor.py
 
 render:
-	python3 scripts/render.py
+	sh scripts/python.sh scripts/render.py
 
-# Network access is explicit. The submodule gitlinks pin each plugin revision.
+# Install includes these pinned packages automatically.
 plugins:
-	git submodule update --init --recursive
+	sh scripts/bootstrap.sh
 
-# Optional Ghostty terminal entry; uses the system tic database for this user.
+# Install includes this entry automatically, without changing system databases.
 terminfo:
-	tic -x third-party/xterm-ghostty.terminfo
+	tic -x -o "$${DOTFILES_HOME:-$$HOME}/.terminfo" third-party/xterm-ghostty.terminfo
 
 secrets-encrypt:
-	python3 scripts/secrets.py encrypt
+	sh scripts/python.sh scripts/secrets.py encrypt
 
 secrets-decrypt:
-	python3 scripts/secrets.py decrypt
+	sh scripts/python.sh scripts/secrets.py decrypt
 
 secrets-install:
-	python3 scripts/secrets.py install
+	sh scripts/python.sh scripts/secrets.py install
 
 test:
-	python3 -m unittest discover -s tests -v
+	sh scripts/python.sh -m unittest discover -s tests -v

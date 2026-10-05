@@ -6,27 +6,28 @@ are not supported.
 
 ## Install
 
-Requires Vim 9.0+, tmux 3.2+, Zsh 5.8+, Python 3.10+, Git, and Make.
-Install these with your package manager first.
+Requires Git and Make to start. Installation supplies Vim 9.0+, tmux 3.2+,
+Zsh 5.8+, Python 3.10+, pinned Vim plugins, formatters, and Ghostty terminfo.
 
 ```sh
 git clone https://github.com/xiam/dotfiles.git
 cd dotfiles
-make doctor
 make install
 ```
 
-`make doctor` checks your tools. `make install` links the settings without
-downloading software or decrypting secrets. Conflicting personal files stay in
-place: move a reported conflict yourself, then rerun installation.
+`make install` uses apt, dnf, pacman, or Homebrew to install missing system tools.
+It downloads user-local Python and JavaScript tools and pinned Vim plugins.
+Linux package installation may ask for sudo access; secrets stay separate.
+Conflicting personal files stay in place. Installation reports conflicts so you
+can choose which personal settings to retain before rerunning.
 Existing application settings and local overrides are preserved.
 
-Optional Vim plugins: `make plugins && make install` explicitly downloads and
-links the pinned packages.
+Run `make doctor` to inspect the installed tools.
 
 ## Format in Vim
 
-Run `:Format` to format the current buffer. Install the tools you need:
+Run `:Format` to format the current buffer. Installation includes gofmt, rustfmt,
+Ruff, and Prettier:
 
 | Language | Formatter, in preference order |
 |---|---|
@@ -35,9 +36,8 @@ Run `:Format` to format the current buffer. Install the tools you need:
 | Python | Ruff, Black |
 | JS/TS/JSX/TSX, YAML, JSON, Markdown | Prettier |
 
-Project-local tools and configuration are supported. Formatters are never
-downloaded automatically. Missing tools or formatter errors leave the buffer
-unchanged. Formatting on save is off by default.
+Project-local tools and configuration take precedence. Missing tools or formatter
+errors leave the buffer unchanged. Formatting on save is off by default.
 
 ## Local settings
 

@@ -142,7 +142,11 @@ def ensure_link(source: Path, destination: Path, home: Path) -> str:
             current = destination.parent / current
         if current.resolve(strict=False) == expected:
             return "already-managed"
-        expected_relative = str(source.resolve().relative_to(ROOT))
+        try:
+            expected_relative = str(source.resolve().relative_to(ROOT))
+        except ValueError:
+            # A complete install links verified plugins from a per-user cache.
+            expected_relative = str(Path("config/.vim/pack/dotfiles/start") / destination.name)
         if not tracked_dotfiles_target(current, expected_relative):
             return "conflict"
     elif destination.exists():
@@ -206,7 +210,8 @@ def install_plugins(home: Path) -> tuple[list[str], list[str]]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--home", type=Path, default=Path(os.environ.get("DOTFILES_HOME", str(Path.home()))))
+    parser.add_argument("--home", type=Path, default=Path(os.environ.get("DOTFILES_HOME") or str(Path.home())))
+    parser.add_argument("--skip-plugins", action="store_true", help="link settings only; plugins are supplied separately")
     args = parser.parse_args()
     home = args.home.expanduser().resolve()
     if sys.version_info < (3, 10):
@@ -227,7 +232,7 @@ def main() -> int:
         else:
             print(f"{result}: {destination} -> {source}")
 
-    plugin_paths, plugin_conflicts = install_plugins(home)
+    plugin_paths, plugin_conflicts = ([], []) if args.skip_plugins else install_plugins(home)
     conflicts.extend(plugin_conflicts)
     for destination in plugin_paths:
         print(f"plugin link: {destination}")
