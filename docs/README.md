@@ -2,28 +2,32 @@
 
 [Quick start](../README.md)
 
-## Package examples
+## Automatic setup
 
-Install tools with your package manager, then check minimum versions with
-`make doctor`:
+Run `make install` after cloning. Git and Make are entry prerequisites.
+The installer supports Debian/Ubuntu (including their WSL distributions), Fedora,
+Arch, and macOS with Homebrew. Package installation needs internet access and
+may request sudo on Linux. Unsupported package managers or insufficient package
+versions fail with an error rather than report a complete installation.
 
-```sh
-# Debian / Ubuntu
-sudo apt install vim tmux zsh git make python3 python3-venv
-# macOS (Homebrew)
-brew install vim tmux zsh git make python
-```
+Python dependencies and Ruff live in `~/.local/share/dotfiles/python`.
+Prettier lives in `~/.local/share/dotfiles/node`; neither requires global pip/npm
+changes. `make render` and `make test` discover the installed Python environment.
+The formatter also discovers the managed tools without a PATH change or shell restart.
+Installation records the validated Node location so an older inherited PATH cannot
+override Node when Prettier runs. `make doctor` checks the selected Python runtime.
+The generated Zsh configuration adds their directories to PATH for new shells.
 
-Rendering and tests need Jinja2 and PyYAML. Install them in a virtual environment:
+`plugins.json` records exact public plugin URLs and revisions. Installation
+verifies each checkout before linking it from `~/.local/share/dotfiles/plugins`,
+including when the source is a downloaded snapshot without Git metadata.
+Reruns reuse verified caches. Network or version failures leave installation
+incomplete; rerun the same command after fixing access.
 
-```sh
-python3 -m venv .venv
-. .venv/bin/activate
-python3 -m pip install -r requirements-render.txt
-```
-
-OpenSSL is needed for secrets commands and their tests. Formatters and applications
+OpenSSL is needed only for optional secrets commands and their tests. Applications
 such as btop, htop, and Ghostty are optional; install them separately if you use them.
+The terminal configuration and Ghostty terminal entry are supplied even on SSH hosts
+where the Ghostty application is not installed.
 
 ## Customize
 
@@ -39,8 +43,9 @@ settings through `templates/`, then render again. Do not edit generated files
 under `config/` or `exports/` directly.
 
 The installer seeds btop, htop, and Ghostty settings only when their destination
-files are absent. It preserves existing settings. For Ghostty's optional terminal
-entry, run `make terminfo` (requires `tic`). Add
+files are absent. It preserves existing settings. Installation compiles and checks
+Ghostty terminfo in `~/.terminfo` for the selected user, without modifying system
+databases. Install on each remote SSH host that receives `TERM=xterm-ghostty`. Add
 `exports/windows-terminal-color-scheme.json` manually in Windows Terminal if desired.
 
 ## Try another home
@@ -57,7 +62,7 @@ password out of command arguments and environment variables; use the prompt.
 
 ## Smoke checks
 
-After installing tools and the Python dependencies above:
+After `make install`:
 
 ```sh
 make doctor

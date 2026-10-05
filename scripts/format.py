@@ -4,10 +4,23 @@
 from __future__ import annotations
 
 import argparse
+import json
+import os
 import shutil
 import subprocess
 import sys
 from pathlib import Path
+
+
+PRETTIER_FILETYPES = {"javascript", "javascriptreact", "typescript", "typescriptreact", "yaml", "json", "markdown"}
+
+
+def managed_tool(name: str) -> str | None:
+    home = Path(os.environ.get("DOTFILES_HOME") or str(Path.home())).expanduser()
+    state = home / ".local/share/dotfiles"
+    candidates = (state / "python/bin" / name, state / "node/bin" / name,
+                  Path("/opt/homebrew/bin") / name, Path("/usr/local/bin") / name)
+    return next((str(path) for path in candidates if path.is_file() and os.access(path, os.X_OK)), None)
 
 
 def find_up(start: Path, relative: str) -> Path | None:
@@ -45,20 +58,24 @@ def formatter(filetype: str, name: Path) -> list[str] | None:
     local_goimports = find_up(name.parent, "bin/goimports")
     local_gofmt = find_up(name.parent, "bin/gofmt")
     if filetype in {"go"}:
-        tool = local_goimports or shutil.which("goimports") or local_gofmt or shutil.which("gofmt")
+        tool = local_goimports or local_gofmt or shutil.which("goimports") or shutil.which("gofmt") or managed_tool("gofmt")
         return [str(tool)] if tool else None
     if filetype == "rust":
         local_rustfmt = find_up(name.parent, ".cargo/bin/rustfmt") or find_up(name.parent, "bin/rustfmt")
-        path = str(local_rustfmt) if local_rustfmt else shutil.which("rustfmt")
+        path = str(local_rustfmt) if local_rustfmt else shutil.which("rustfmt") or managed_tool("rustfmt")
         return [path, "--emit", "stdout", "--edition", "2021"] if path else None
     if filetype == "python":
-        ruff = str(local_ruff) if local_ruff else shutil.which("ruff")
+        if local_ruff:
+            return [str(local_ruff), "format", "--stdin-filename", str(name), "-"]
+        if local_black:
+            return [str(local_black), "--quiet", "--stdin-filename", str(name), "-"]
+        ruff = shutil.which("ruff") or managed_tool("ruff")
         if ruff:
             return [ruff, "format", "--stdin-filename", str(name), "-"]
-        black = str(local_black) if local_black else shutil.which("black")
+        black = shutil.which("black")
         return [black, "--quiet", "--stdin-filename", str(name), "-"] if black else None
-    if filetype in {"javascript", "javascriptreact", "typescript", "typescriptreact", "yaml", "json", "markdown"}:
-        prettier = str(local_prettier) if local_prettier else shutil.which("prettier")
+    if filetype in PRETTIER_FILETYPES:
+        prettier = str(local_prettier) if local_prettier else shutil.which("prettier") or managed_tool("prettier")
         return [prettier, "--stdin-filepath", str(name)] if prettier else None
     return None
 
@@ -76,14 +93,25 @@ def main() -> int:
         print("No compatible Go formatter found; install goimports or gofmt.", file=sys.stderr)
         return 2
     try:
+        environment = os.environ.copy()
+        # Prettier's launcher uses `env node`. Use the location validated by
+        # installation ahead of any stale Node in an existing Vim session.
+        home = Path(environment.get("DOTFILES_HOME") or str(Path.home())).expanduser()
+        runtime = home / ".local/share/dotfiles/runtime.json"
+        if args.filetype in PRETTIER_FILETYPES and runtime.exists():
+            node = Path(json.loads(runtime.read_text())["node"])
+            if not node.is_absolute() or not node.is_file() or not os.access(node, os.X_OK):
+                raise OSError("Installed Node is unavailable; rerun make install")
+            environment["PATH"] = str(node.parent) + os.pathsep + environment.get("PATH", "")
         result = subprocess.run(
             command,
             input=sys.stdin.buffer.read(),
             capture_output=True,
             check=False,
             cwd=project_root(args.filetype, args.name.expanduser().resolve(strict=False)),
+            env=environment,
         )
-    except OSError as exc:
+    except (OSError, ValueError, KeyError, TypeError) as exc:
         print(f"Could not start formatter: {exc}", file=sys.stderr)
         return 2
     if result.returncode:

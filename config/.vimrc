@@ -76,7 +76,8 @@ augroup END
 let g:dotfiles_root = fnamemodify(resolve(expand('<sfile>:p')), ':h:h')
 function! DotfilesFormatBuffer() abort
   let l:input = join(getline(1, '$'), "\n") . (&endofline ? "\n" : '')
-  let l:command = 'python3 ' . shellescape(g:dotfiles_root . '/scripts/format.py')
+  let l:command = 'sh ' . shellescape(g:dotfiles_root . '/scripts/python.sh')
+        \ . ' ' . shellescape(g:dotfiles_root . '/scripts/format.py')
         \ . ' --filetype ' . shellescape(&filetype)
         \ . ' --name ' . shellescape(expand('%:p'))
   let l:output = system(l:command, l:input)

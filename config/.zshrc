@@ -34,7 +34,8 @@ export VISUAL=vim
 
 # Add only existing user tool directories; preserve the inherited PATH.
 typeset -U path PATH
-for dotfiles_path in "$HOME/.local/bin" "$HOME/bin" "$HOME/go/bin" \
+for dotfiles_path in "$HOME/.local/share/dotfiles/python/bin" \
+  "$HOME/.local/share/dotfiles/node/bin" "$HOME/.local/bin" "$HOME/bin" "$HOME/go/bin" \
   "/usr/local/go/bin" "$HOME/.cargo/bin" "$HOME/.pulumi/bin" \
   "$HOME/.yarn/bin" "$HOME/.local/share/pnpm" "$HOME/.rvm/bin" \
   "$HOME/opt/processing"; do

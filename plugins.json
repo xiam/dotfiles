@@ -1,0 +1,18 @@
+{
+  "neoformat": {
+    "url": "https://github.com/sbdchd/neoformat.git",
+    "commit": "9d95e5ca3ab263363758d5b1d7a174a30556ab2d"
+  },
+  "rust.vim": {
+    "url": "https://github.com/rust-lang/rust.vim.git",
+    "commit": "889b9a7515db477f4cb6808bef1769e53493c578"
+  },
+  "vim-repeat": {
+    "url": "https://github.com/tpope/vim-repeat.git",
+    "commit": "65846025c15494983dafe5e3b46c8f88ab2e9635"
+  },
+  "vim-surround": {
+    "url": "https://github.com/tpope/vim-surround.git",
+    "commit": "3d188ed2113431cf8dac77be61b842acb64433d9"
+  }
+}
