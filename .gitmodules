@@ -1,13 +1,12 @@
-[submodule "config/.vim/bundle/vim-prettier"]
-	path = config/.vim/bundle/vim-prettier
-	url = https://github.com/prettier/vim-prettier
-[submodule "config/.vim/bundle/rust.vim"]
-	path = config/.vim/bundle/rust.vim
+[submodule "config/.vim/pack/dotfiles/start/rust.vim"]
+	path = config/.vim/pack/dotfiles/start/rust.vim
 	url = https://github.com/rust-lang/rust.vim.git
-[submodule "config/.vim/pack/github/start/copilot.vim"]
-	path = config/.vim/pack/ai/start/copilot.vim
-	url = https://github.com/github/copilot.vim.git
-	branch = release
-[submodule "config/.vim/pack/github/start/vim-ai"]
-	path = config/.vim/pack/ai/start/vim-ai
-	url = https://github.com/madox2/vim-ai.git
+[submodule "config/.vim/pack/dotfiles/start/neoformat"]
+	path = config/.vim/pack/dotfiles/start/neoformat
+	url = https://github.com/sbdchd/neoformat.git
+[submodule "config/.vim/pack/dotfiles/start/vim-surround"]
+	path = config/.vim/pack/dotfiles/start/vim-surround
+	url = https://github.com/tpope/vim-surround.git
+[submodule "config/.vim/pack/dotfiles/start/vim-repeat"]
+	path = config/.vim/pack/dotfiles/start/vim-repeat
+	url = https://github.com/tpope/vim-repeat.git

@@ -1,0 +1,8 @@
+{
+  "blocked_paths": [],
+  "published_branches": [
+    "master"
+  ],
+  "schema_version": 2,
+  "source_hash": "sha256:6917cee8247f83eb0df3db4ebae7d3d2497ec349533ef40997cb2ba23fbc2642"
+}

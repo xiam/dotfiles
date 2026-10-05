@@ -1,0 +1,23 @@
+# Semantic Kanagawa-inspired workstation palette. Keep tokens role-based.
+theme:
+  name: Kanagawa
+  bg: "#1f1f28"
+  surface: "#2a2a37"
+  surface2: "#363646"
+  fg: "#dcd7ba"
+  fg_dim: "#c8c093"
+  pane_inactive_fg: "#a6a69c"
+  muted: "#a6a69c"
+  subtle: "#54546d"
+  accent1: "#957fb8"
+  accent2: "#7e9cd8"
+  accent3: "#98bb6c"
+  cyan: "#7fb4ca"
+  warning: "#e6c384"
+  orange: "#ffa066"
+  error: "#e82424"
+  success: "#98bb6c"
+  fallback_user: magenta
+  fallback_host: green
+  fallback_path: blue
+  fallback_git: yellow
