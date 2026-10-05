@@ -1,4 +1,4 @@
-# Zsh Kanagawa workstation configuration
+# Zsh {{ theme.name }} workstation configuration
 autoload -Uz promptinit
 promptinit
 
@@ -14,15 +14,15 @@ zstyle ':completion:*' matcher-list '' 'm:{a-z}={A-Z}' 'm:{a-zA-Z}={A-Za-z}'
 autoload -Uz vcs_info
 precmd() { vcs_info }
 if [[ "$COLORTERM" == truecolor || "$COLORTERM" == 24bit ]]; then
-  typeset -g DOTFILES_COLOR_USER=$'%{\e[38;2;149,127,184m%}'
-  typeset -g DOTFILES_COLOR_HOST=$'%{\e[38;2;152,187,108m%}'
-  typeset -g DOTFILES_COLOR_PATH=$'%{\e[38;2;126,156,216m%}'
-  typeset -g DOTFILES_COLOR_GIT=$'%{\e[38;2;230,195,132m%}'
+  typeset -g DOTFILES_COLOR_USER=$'%{\e[38;2;{{ theme.accent1 | rgb }}m%}'
+  typeset -g DOTFILES_COLOR_HOST=$'%{\e[38;2;{{ theme.accent3 | rgb }}m%}'
+  typeset -g DOTFILES_COLOR_PATH=$'%{\e[38;2;{{ theme.accent2 | rgb }}m%}'
+  typeset -g DOTFILES_COLOR_GIT=$'%{\e[38;2;{{ theme.warning | rgb }}m%}'
 else
-  typeset -g DOTFILES_COLOR_USER='%F{magenta}'
-  typeset -g DOTFILES_COLOR_HOST='%F{green}'
-  typeset -g DOTFILES_COLOR_PATH='%F{blue}'
-  typeset -g DOTFILES_COLOR_GIT='%F{yellow}'
+  typeset -g DOTFILES_COLOR_USER='%F{ {{- theme.fallback_user -}} }'
+  typeset -g DOTFILES_COLOR_HOST='%F{ {{- theme.fallback_host -}} }'
+  typeset -g DOTFILES_COLOR_PATH='%F{ {{- theme.fallback_path -}} }'
+  typeset -g DOTFILES_COLOR_GIT='%F{ {{- theme.fallback_git -}} }'
 fi
 zstyle ':vcs_info:git:*' formats " ${DOTFILES_COLOR_GIT}(%b)%f"
 setopt PROMPT_SUBST

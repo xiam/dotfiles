@@ -1,0 +1,30 @@
+" Generated from theme.yml. Do not edit generated files.
+set background=dark
+hi clear
+if exists('syntax_on') | syntax reset | endif
+let g:colors_name = 'dotfiles'
+let s:gui = &t_Co >= 256 || has('termguicolors')
+hi Normal guifg={{ theme.fg }} guibg={{ theme.bg }} ctermfg=252 ctermbg=234
+hi CursorLine guibg={{ theme.surface2 }} ctermbg=236
+hi CursorLineNr guifg={{ theme.warning }} guibg={{ theme.surface2 }} ctermfg=221 ctermbg=236
+hi LineNr guifg={{ theme.muted }} guibg={{ theme.bg }} ctermfg=145 ctermbg=234
+hi Comment guifg={{ theme.muted }} gui=italic ctermfg=145 cterm=italic
+hi Constant guifg={{ theme.orange }} ctermfg=215
+hi String guifg={{ theme.accent3 }} ctermfg=149
+hi Identifier guifg={{ theme.cyan }} ctermfg=109
+hi Function guifg={{ theme.accent2 }} ctermfg=110
+hi Statement guifg={{ theme.accent1 }} ctermfg=140
+hi Type guifg={{ theme.cyan }} ctermfg=109
+hi Special guifg={{ theme.warning }} ctermfg=221
+hi Search guifg={{ theme.bg }} guibg={{ theme.warning }} ctermfg=234 ctermbg=221
+hi Visual guibg={{ theme.surface2 }} ctermbg=236
+hi Error guifg={{ theme.error }} gui=bold ctermfg=203 cterm=bold
+hi WarningMsg guifg={{ theme.warning }} ctermfg=221
+hi StatusLine guifg={{ theme.fg }} guibg={{ theme.surface }} ctermfg=252 ctermbg=236
+hi StatusLineNC guifg={{ theme.muted }} guibg={{ theme.bg }} ctermfg=145 ctermbg=234
+hi VertSplit guifg={{ theme.surface }} guibg={{ theme.bg }} ctermfg=236 ctermbg=234
+hi MatchParen guifg={{ theme.warning }} gui=bold ctermfg=221 cterm=bold
+hi Pmenu guifg={{ theme.fg }} guibg={{ theme.surface }} ctermfg=252 ctermbg=236
+hi PmenuSel guifg={{ theme.bg }} guibg={{ theme.accent2 }} ctermfg=234 ctermbg=110
+hi NonText guifg={{ theme.subtle }} ctermfg=60
+hi EndOfBuffer guifg={{ theme.subtle }} ctermfg=60

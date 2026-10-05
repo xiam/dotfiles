@@ -1,4 +1,4 @@
-# Tmux Kanagawa workstation configuration
+# Tmux {{ theme.name }} workstation configuration
 set -g prefix C-b
 set -g history-limit 99999
 set -g mouse off
@@ -55,30 +55,30 @@ bind m set-option -g mouse on \; display "Mouse: ON"
 bind M set-option -g mouse off \; display "Mouse: OFF"
 
 # F12 toggles nested tmux passthrough.
-bind -T root F12 set prefix None \; set key-table off \; set status-style "bg=#e82424,fg=#1f1f28" \; refresh-client -S
+bind -T root F12 set prefix None \; set key-table off \; set status-style "bg={{ theme.error }},fg={{ theme.bg }}" \; refresh-client -S
 bind -T off F12 set -u prefix \; set -u key-table \; set -u status-style \; refresh-client -S
 
 set -g default-terminal "tmux-256color"
 set -ga terminal-overrides ",*256col*:Tc"
-set -g pane-border-style "fg=#2a2a37"
-set -g pane-active-border-style "fg=#7e9cd8"
-set -g window-style "fg=#a6a69c,bg=#1f1f28"
-set -g window-active-style "fg=#dcd7ba,bg=#1f1f28"
+set -g pane-border-style "fg={{ theme.surface }}"
+set -g pane-active-border-style "fg={{ theme.accent2 }}"
+set -g window-style "fg={{ theme.pane_inactive_fg }},bg={{ theme.bg }}"
+set -g window-active-style "fg={{ theme.fg }},bg={{ theme.bg }}"
 set -g status-position bottom
 set -g status-interval 5
-set -g status-style "bg=#1f1f28,fg=#dcd7ba"
+set -g status-style "bg={{ theme.bg }},fg={{ theme.fg }}"
 set -g status-left-length 40
 set -g status-right-length 80
-set -g status-left "#[fg=#1f1f28,bg=#7e9cd8,bold] #S #[default] "
-set -g status-right "#[fg=#a6a69c]%H:%M %Y-%m-%d"
-setw -g window-status-format "#[fg=#a6a69c]#I:#W"
-setw -g window-status-current-format "#[fg=#1f1f28,bg=#7e9cd8,bold] #I:#W #[default]"
+set -g status-left "#[fg={{ theme.bg }},bg={{ theme.accent2 }},bold] #S #[default] "
+set -g status-right "#[fg={{ theme.muted }}]%H:%M %Y-%m-%d"
+setw -g window-status-format "#[fg={{ theme.muted }}]#I:#W"
+setw -g window-status-current-format "#[fg={{ theme.bg }},bg={{ theme.accent2 }},bold] #I:#W #[default]"
 setw -g window-status-separator "  "
 setw -g monitor-bell on
 set -g visual-bell off
-set -g message-style "bg=#2a2a37,fg=#dcd7ba"
-set -g mode-style "bg=#7e9cd8,fg=#1f1f28,bold"
-set -g clock-mode-colour "#7e9cd8"
+set -g message-style "bg={{ theme.surface }},fg={{ theme.fg }}"
+set -g mode-style "bg={{ theme.accent2 }},fg={{ theme.bg }},bold"
+set -g clock-mode-colour "{{ theme.accent2 }}"
 setw -g monitor-activity on
 set -g visual-activity off
 
