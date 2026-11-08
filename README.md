@@ -6,8 +6,8 @@ are not supported.
 
 ## Install
 
-Requires Git and Make to start. Installation supplies Vim 9.0+, tmux 3.2+,
-Zsh 5.8+, Python 3.10+, pinned Vim plugins, formatters, and Ghostty terminfo.
+Requires Git and Make. Installation uses the operating system's package manager
+for native tools, pip for Python packages, npm for Prettier, and Git for Vim plugins.
 
 ```sh
 git clone https://github.com/xiam/dotfiles.git
@@ -15,14 +15,31 @@ cd dotfiles
 make install
 ```
 
-`make install` uses apt, dnf, pacman, or Homebrew to install missing system tools.
-It downloads user-local Python and JavaScript tools and pinned Vim plugins.
-Linux package installation may ask for sudo access; secrets stay separate.
-Conflicting personal files stay in place. Installation reports conflicts so you
-can choose which personal settings to retain before rerunning.
-Existing application settings and local overrides are preserved.
+Supported installation profiles cover Debian 13 amd64 and Ubuntu Server 24.04
+and 26.04 amd64. macOS installation remains disabled and untested. Other
+platforms are rejected. WSL2 uses its supported Linux distribution; WSL-specific
+execution has not been tested.
 
-Run `make doctor` to inspect the installed tools.
+Native package versions are pinned in `security/*.packages.txt`. APT uses the
+host's configured repositories and their normal signature and archive-hash checks.
+Python packages use the committed requirements hashes; npm uses its lockfile's
+integrity checks; Vim plugins use exact Git commits. TLS verification remains
+enabled. These pins and hashes identify versions and content; they do not claim
+independent authorship verification or continuous security assessment.
+
+Installation needs network access and may request sudo on Linux. Missing pinned
+versions or repository authentication failures stop installation. Update pins
+through normal repository changes when needed. There is no custom admission,
+freshness, renewal, or expiry policy.
+
+Conflicting personal files stay in place. Installation reports conflicts so you
+can choose which settings to retain before rerunning. Application settings and
+local overrides are preserved. Secrets stay separate.
+
+Run `make doctor` to inspect installed tools and minimum versions. Formatting,
+rendering, tests, and secrets commands use the installed Python environment
+without downloading packages or rechecking package evidence. Run `make install`
+separately to install or update dependencies.
 
 ## Format in Vim
 
@@ -38,6 +55,8 @@ Ruff, and Prettier:
 
 Project-local tools and configuration take precedence. Missing tools or formatter
 errors leave the buffer unchanged. Formatting on save is off by default.
+Owner-selected project/PATH formatter overrides and local configuration remain
+trusted customization inputs.
 
 ## Local settings
 

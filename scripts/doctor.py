@@ -8,6 +8,9 @@ import shutil
 import subprocess
 import sys
 from importlib.util import find_spec
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 from format import managed_tool
 
 

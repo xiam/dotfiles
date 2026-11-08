@@ -1,9 +1,7 @@
 #!/bin/sh
-# Use the installed user environment for rendering, tests, and secrets commands.
+# Use the Python environment installed by make install without network activity.
 set -eu
 dotfiles_home=${DOTFILES_HOME:-$HOME}
-dotfiles_python="$dotfiles_home/.local/share/dotfiles/python/bin/python"
-if [ -x "$dotfiles_python" ]; then
-    exec "$dotfiles_python" "$@"
-fi
-exec python3 "$@"
+python="$dotfiles_home/.local/share/dotfiles/python-current/bin/python"
+[ -x "$python" ] || { printf '%s\n' 'Managed Python is absent; run make install separately.' >&2; exit 1; }
+exec "$python" -I "$@"

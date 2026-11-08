@@ -132,7 +132,12 @@ def decrypt_bundle(root: Path, password: str, bundle: Path | None = None) -> Pat
     with tempfile.TemporaryDirectory(prefix=".secrets-stage-", dir=root) as temp_name:
         stage_root = Path(temp_name)
         staged_secrets = stage_root / "secrets"
-        extract_archive(tar_data, staged_secrets)
+        try:
+            extract_archive(tar_data, staged_secrets)
+        except (tarfile.TarError, EOFError) as error:
+            # CBC padding success does not establish archive authenticity.
+            # Malformed decrypted bytes must fail without publishing plaintext.
+            raise RuntimeError("decrypted bundle is not a valid secret archive") from error
         os.replace(staged_secrets, destination)
     return destination
 

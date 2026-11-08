@@ -145,7 +145,7 @@ def ensure_link(source: Path, destination: Path, home: Path) -> str:
         try:
             expected_relative = str(source.resolve().relative_to(ROOT))
         except ValueError:
-            # A complete install links verified plugins from a per-user cache.
+            # A complete install links pinned plugins from a per-user cache.
             expected_relative = str(Path("config/.vim/pack/dotfiles/start") / destination.name)
         if not tracked_dotfiles_target(current, expected_relative):
             return "conflict"
