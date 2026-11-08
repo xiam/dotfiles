@@ -1,0 +1,8 @@
+{
+  "name": "dotfiles-formatters",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "prettier": "3.5.3"
+  }
+}

@@ -62,6 +62,17 @@ class SecretsTests(unittest.TestCase):
             self.assertEqual(list(root.glob(".secrets-stage-*")), [])
             self.assertFalse((Path(name) / "home/token").exists())
 
+    def test_padding_success_with_invalid_archive_never_publishes_plaintext(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            bundle = root / 'synthetic.enc'
+            bundle.write_bytes(b'synthetic encrypted fixture')
+            with patch.object(secrets, 'openssl', return_value=b'not an archive'):
+                with self.assertRaisesRegex(RuntimeError, 'not a valid secret archive'):
+                    secrets.decrypt_bundle(root, 'synthetic', bundle)
+            self.assertFalse((root / 'secrets').exists())
+            self.assertEqual(list(root.glob('.secrets-stage-*')), [])
+
     def test_failed_encryption_preserves_previous_bundle(self) -> None:
         with tempfile.TemporaryDirectory(prefix="synthetic credentials ") as name:
             root = Path(name)

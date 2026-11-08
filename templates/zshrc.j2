@@ -34,7 +34,39 @@ export VISUAL=vim
 
 # Add only existing user tool directories; preserve the inherited PATH.
 typeset -U path PATH
-for dotfiles_path in "$HOME/.local/share/dotfiles/python/bin" \
+if [[ "$OSTYPE" == darwin* ]]; then
+  dotfiles_brew_home="${DOTFILES_HOME:-$HOME}"
+  dotfiles_brew_state="$dotfiles_brew_home/.local/share/dotfiles/native-brew"
+  dotfiles_brew_environment="$dotfiles_brew_state/environment.sh"
+  dotfiles_brew_marker="$dotfiles_brew_state/installed.json"
+  dotfiles_brew_parents_safe=true
+  for dotfiles_brew_parent in "$dotfiles_brew_home/.local" "$dotfiles_brew_home/.local/share" \
+    "$dotfiles_brew_home/.local/share/dotfiles" "$dotfiles_brew_state"; do
+    if [[ ! -d "$dotfiles_brew_parent" || -L "$dotfiles_brew_parent" || ! -O "$dotfiles_brew_parent" ]]; then
+      dotfiles_brew_parents_safe=false
+      break
+    fi
+    dotfiles_brew_mode=$(/usr/bin/stat -f %Lp "$dotfiles_brew_parent")
+    if [[ "$dotfiles_brew_mode" != <-> ]] || (( (8#$dotfiles_brew_mode & 022) != 0 )); then
+      dotfiles_brew_parents_safe=false
+      break
+    fi
+  done
+  if [[ "$dotfiles_brew_parents_safe" == true &&
+        -f "$dotfiles_brew_environment" && ! -L "$dotfiles_brew_environment" && -O "$dotfiles_brew_environment" &&
+        -f "$dotfiles_brew_marker" && ! -L "$dotfiles_brew_marker" && -O "$dotfiles_brew_marker" &&
+        "$(/usr/bin/stat -f %Lp "$dotfiles_brew_environment")" == 600 &&
+        "$(/usr/bin/stat -f %Lp "$dotfiles_brew_marker")" == 600 &&
+        "$(/usr/bin/plutil -extract schema raw -o - "$dotfiles_brew_marker" 2>/dev/null)" == dotfiles-brew-state/v1 ]]; then
+    dotfiles_brew_digest=$(/usr/bin/shasum -a 256 "$dotfiles_brew_environment")
+    if [[ "${dotfiles_brew_digest%% *}" == "$(/usr/bin/plutil -extract environment_sha256 raw -o - "$dotfiles_brew_marker" 2>/dev/null)" ]]; then
+      source "$dotfiles_brew_environment"
+    else
+      print -u2 'Managed native environment differs from its installation record; not loaded.'
+    fi
+  fi
+fi
+for dotfiles_path in "$HOME/.local/share/dotfiles/python-current/bin" \
   "$HOME/.local/share/dotfiles/node/bin" "$HOME/.local/bin" "$HOME/bin" "$HOME/go/bin" \
   "/usr/local/go/bin" "$HOME/.cargo/bin" "$HOME/.pulumi/bin" \
   "$HOME/.yarn/bin" "$HOME/.local/share/pnpm" "$HOME/.rvm/bin" \

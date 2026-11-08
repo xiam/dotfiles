@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import os
 import shutil
+import shlex
 import subprocess
 import sys
 import tempfile
@@ -26,6 +27,14 @@ class PlatformTests(unittest.TestCase):
         if install.returncode:
             raise RuntimeError(install.stderr)
         cls.env = env
+        # Buffer diagnostics use a disposable wrapper with the test Python.
+        formatter_root = cls.home / 'formatter diagnostic'
+        formatter_scripts = formatter_root / 'scripts'
+        formatter_scripts.mkdir(parents=True)
+        shutil.copy2(ROOT / 'scripts/format.py', formatter_scripts / 'format.py')
+        (formatter_scripts / 'python.sh').write_text(
+            '#!/bin/sh\nexec ' + shlex.quote(sys.executable) + ' "$@"\n')
+        cls.formatter_fixture = 'let g:dotfiles_root = ' + repr(str(formatter_root))
 
     @classmethod
     def tearDownClass(cls) -> None:
@@ -229,7 +238,7 @@ class PlatformTests(unittest.TestCase):
         edit = "execute 'edit' fnameescape(" + repr(str(source)) + ")"
         write = "call writefile(getline(1, '$'), " + repr(str(output)) + ")"
         success = subprocess.run(
-            [vim, "-Nu", str(self.home / ".vimrc"), "-n", "-i", "NONE", "-es", "-c", edit,
+            [vim, "-Nu", str(self.home / ".vimrc"), "-n", "-i", "NONE", "-es", "-c", self.formatter_fixture, "-c", edit,
              "-c", "call setline(1, ['unsaved', 'buffer'])", "-c", "Format", "-c", write, "-c", "qa!"],
             env=env, capture_output=True, text=True,
         )
@@ -243,7 +252,7 @@ class PlatformTests(unittest.TestCase):
         py_source.write_text("on-disk\n")
         edit = "execute 'edit' fnameescape(" + repr(str(py_source)) + ")"
         failure = subprocess.run(
-            [vim, "-Nu", str(self.home / ".vimrc"), "-n", "-i", "NONE", "-es", "-c", edit,
+            [vim, "-Nu", str(self.home / ".vimrc"), "-n", "-i", "NONE", "-es", "-c", self.formatter_fixture, "-c", edit,
              "-c", "call setline(1, ['still unsaved'])", "-c", "Format", "-c", write, "-c", "qa!"],
             env=env, capture_output=True, text=True,
         )
@@ -263,7 +272,7 @@ class PlatformTests(unittest.TestCase):
         write = "call writefile(getline(1, '$'), " + repr(str(output)) + ")"
         unformatted = ['package main', 'func main(){println("ok")}']
         success = subprocess.run(
-            [vim, "-Nu", str(self.home / ".vimrc"), "-n", "-i", "NONE", "-es", "-c", edit,
+            [vim, "-Nu", str(self.home / ".vimrc"), "-n", "-i", "NONE", "-es", "-c", self.formatter_fixture, "-c", edit,
              "-c", "call deletebufline('%', 2, '$')", "-c", "call setline(1, " + repr(unformatted) + ")", "-c", "Format", "-c", write, "-c", "qa!"],
             env=self.env, capture_output=True, text=True,
         )
@@ -282,7 +291,7 @@ class PlatformTests(unittest.TestCase):
             part for part in self.env.get("PATH", "").split(os.pathsep) if Path(part, "gofmt").exists() is False
         )
         failure = subprocess.run(
-            [vim, "-Nu", str(self.home / ".vimrc"), "-n", "-i", "NONE", "-es", "-c", edit,
+            [vim, "-Nu", str(self.home / ".vimrc"), "-n", "-i", "NONE", "-es", "-c", self.formatter_fixture, "-c", edit,
              "-c", "call deletebufline('%', 2, '$')", "-c", "call setline(1, " + repr(unchanged) + ")", "-c", "silent! Format", "-c", write, "-c", "qa!"],
             env=failing_env, capture_output=True, text=True,
         )

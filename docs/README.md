@@ -5,29 +5,43 @@
 ## Automatic setup
 
 Run `make install` after cloning. Git and Make are entry prerequisites.
-The installer supports Debian/Ubuntu (including their WSL distributions), Fedora,
-Arch, and macOS with Homebrew. Package installation needs internet access and
-may request sudo on Linux. Unsupported package managers or insufficient package
-versions fail with an error rather than report a complete installation.
+Supported profiles cover Debian 13 amd64 and Ubuntu Server 24.04/26.04 amd64.
+macOS installation remains disabled and untested. Other releases and architectures
+are rejected; WSL-specific execution has not been tested. Installation normally
+needs internet access and may request sudo on Linux.
 
-Python dependencies and Ruff live in `~/.local/share/dotfiles/python`.
-Prettier lives in `~/.local/share/dotfiles/node`; neither requires global pip/npm
-changes. `make render` and `make test` discover the installed Python environment.
-The formatter also discovers the managed tools without a PATH change or shell restart.
-Installation records the validated Node location so an older inherited PATH cannot
-override Node when Prettier runs. `make doctor` checks the selected Python runtime.
-The generated Zsh configuration adds their directories to PATH for new shells.
+APT installs the exact versions in `security/*.packages.txt` using the host's
+configured repositories and standard repository signature and archive-hash checks.
+Companion packages with exact version dependencies, such as Vim's runtime, are
+pinned alongside their applications. Installation does not enable unauthenticated
+repositories or automatic downgrades. A missing pinned version, incompatible
+installed package, or failed authentication stops setup; adjust pins through a
+normal repository change rather than disabling package-manager checks.
 
-`plugins.json` records exact public plugin URLs and revisions. Installation
-verifies each checkout before linking it from `~/.local/share/dotfiles/plugins`,
-including when the source is a downloaded snapshot without Git metadata.
-Reruns reuse verified caches. Network or version failures leave installation
-incomplete; rerun the same command after fixing access.
+Python dependencies and Ruff live in a managed environment selected by
+`~/.local/share/dotfiles/python-current`. Pip enforces
+`security/requirements-lock.txt` with `--require-hashes`. Lock or Python-base changes
+preserve the old environment and create a replacement. Prettier lives in
+`~/.local/share/dotfiles/node`; `npm ci` enforces the existing package lock and
+registry integrity hashes with lifecycle scripts disabled. Neither needs global
+pip/npm changes. The formatter discovers these tools without a shell restart.
+Installation records the Node location used for managed Prettier.
 
-OpenSSL is needed only for optional secrets commands and their tests. Applications
-such as btop, htop, and Ghostty are optional; install them separately if you use them.
-The terminal configuration and Ghostty terminal entry are supplied even on SSH hosts
-where the Ghostty application is not installed.
+`plugins.json` records exact HTTPS Git URLs and commit IDs. Installation fetches
+those commits, checks Git's checkout identity and clean working tree, and links
+plugins from `~/.local/share/dotfiles/plugins`. Personal changes and foreign links
+are preserved. Git checks pinned content; this does not assert a separate
+maintainer signature or provenance policy.
+
+`make doctor` reports tool availability and minimum versions. Rendering, formatting,
+tests, and secrets commands run locally through the installed Python environment.
+They do not contact registries, renew evidence, or require a custom policy date.
+Missing dependencies require a separate `make install`. Native package-manager
+updates remain the operating system's responsibility.
+
+Applications such as btop, htop, and Ghostty are optional; install them separately
+if you use them. The terminal configuration and Ghostty terminal entry are supplied
+even on SSH hosts where the Ghostty application is absent.
 
 ## Customize
 
@@ -72,5 +86,5 @@ tmux -L dotfiles-smoke kill-server
 ```
 
 Run the tmux commands as a pair after `make install`; the isolated socket avoids
-your live sessions. Linux tests have passed. macOS and WSL2 checks have not been
-run; use these commands on those hosts. In WSL2, use the Linux shell.
+your live sessions. Linux tests have passed. macOS installation remains disabled;
+macOS and WSL2 checks have not been run. In WSL2, use the Linux shell.

@@ -18,7 +18,7 @@ PRETTIER_FILETYPES = {"javascript", "javascriptreact", "typescript", "typescript
 def managed_tool(name: str) -> str | None:
     home = Path(os.environ.get("DOTFILES_HOME") or str(Path.home())).expanduser()
     state = home / ".local/share/dotfiles"
-    candidates = (state / "python/bin" / name, state / "node/bin" / name,
+    candidates = (state / "python-current/bin" / name, state / "python/bin" / name, state / "node/bin" / name,
                   Path("/opt/homebrew/bin") / name, Path("/usr/local/bin") / name)
     return next((str(path) for path in candidates if path.is_file() and os.access(path, os.X_OK)), None)
 

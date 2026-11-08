@@ -1,0 +1,61 @@
+title = "Dotfiles secret scanning"
+
+# Retain every rule and built-in exception from native Gitleaks 8.18.4.
+[extend]
+useDefault = true
+
+# Exact public evidence matches only; do not exclude files or hash-shaped values.
+# Native 8.18.4 cannot merge rule-local exceptions into extended rules.
+[allowlist]
+description = "Reviewed immutable public digests and signing-key fingerprints"
+regexTarget = "match"
+regexes = [
+    # Public SHA256 integrity evidence: scripts/app_provenance.py.
+    '''^authorization": "266bf371022fa5461a1138186e83cfacfd8c74de663f67c10a5486e58d252575"$''',
+    # Public SHA256 integrity evidence: security/renewal-policy.json.
+    '''^authorization_sha256": "266bf371022fa5461a1138186e83cfacfd8c74de663f67c10a5486e58d252575"$''',
+    # Public node-readdirp package SHA256; token-shaped prefix: security/debian-13-amd64.lock.tsv.
+    '''^eaac13e138b03e3f342e14bb18c7febd2514a4feb4923f00669503aab7886541\t$''',
+    # Public node-readdirp package SHA256; token-shaped prefix: security/debian-13-amd64-candidate.json.
+    '''^eaac13e138b03e3f342e14bb18c7febd2514a4feb4923f00669503aab7886541"$''',
+    # Public Debian archive signing-key fingerprint: scripts/refresh_native_lock.py.
+    '''^key-12': 'B8B80B5B623EAB6AD8775C45B7C5D7D6350947F8'$''',
+    # Public Debian archive signing-key fingerprint: scripts/refresh_native_lock.py.
+    '''^key-12-security': '05AB90340C0C5E797F44A8C8254CF3B5AEC0A8F0'$''',
+    # Public Debian archive signing-key fingerprint: scripts/refresh_native_lock.py.
+    '''^key-13': '04B54C3CDCA79751B16BC6B5225629DF75B188BD'$''',
+    # Public Debian archive signing-key fingerprint: scripts/refresh_native_lock.py.
+    '''^key-13-security': '5E04A1E3223A19A20706E20F9904613D4CCE68C6'$''',
+    # Public SHA256 integrity evidence: security/provenance/github/neoformat/admission.json.
+    '''^key\.json": "f78f14c645dbc6753aaa0d32e0868ab54faddcbe3b0519f9e7cc001ec360b4ea"$''',
+    # Public SHA256 integrity evidence: security/provenance/github/neoformat/policy.json.
+    '''^key_sha256": "6e8af687f60cf3f403151c8fb1b26e95e6f9e424ca60cc8f3787bd4466a3ef84"$''',
+    # Public SHA256 integrity evidence: security/macos-tahoe-arm64.json.
+    '''^key_sha256": "ef2d2c9e0219d485df9f07fff7b037feadc36c93085be9ffefb1390f31a3de1d"$''',
+    # Public SHA256 integrity evidence: security/artifacts.json.
+    '''^key_sha256": "fb190a462123443500cbcdb6519623e7179e9f38d84ad4e9362b72d2b68b62c1"$''',
+    # Public Sigstore root signing-key identifier: security/provenance/sigstore/root.json.
+    '''^keyid": "183e64f37670dc13ca0d28995a3053f3740954ddce44321a41e46534cf44e632"$''',
+    # Public Sigstore root signing-key identifier: security/provenance/sigstore/root.json.
+    '''^keyid": "22f4caec6d8e6f9555af66b3d4c3cb06a3bb23fdc7e39c916c61f462e6f52b06"$''',
+    # Public Sigstore root signing-key identifier: security/provenance/sigstore/root.json.
+    '''^keyid": "61643838125b440b40db6942f5cb5a31c0dc04368316eb2aaa58b95904a58222"$''',
+    # Public Sigstore root signing-key identifier: security/provenance/sigstore/root.json.
+    '''^keyid": "a687e5bf4fab82b0ee58d46e05c9535145a2c9afb458f43d42b45ca0fdce2a70"$''',
+    # Public Sigstore root signing-key identifier: security/provenance/sigstore/root.json.
+    '''^keyid": "e71a54d543835ba86adad9460379c7641fb8726d164ea766801a1c522aba7ea2"$''',
+    # Public SHA256 integrity evidence: security/debian-13-amd64-candidate.json, security/provenance/native-seed.json.
+    '''^keyring_sha256": "59dbde1397f8edc4e4aa24829ba36f9583ea5b4480091c34b89dad9e56360a19"$''',
+    # Public SHA256 integrity evidence: security/debian-13-amd64-candidate.json, security/provenance/native-seed.json.
+    '''^keyring_sha256": "8bdddebd345030721f22d0f6a7291a4791a2183621bd444cc6a683d7ade73a6e"$''',
+    # Public SHA256 integrity evidence: security/debian-13-amd64-candidate.json, security/provenance/native-seed.json.
+    '''^keyring_sha256": "8dbd0029697f8c9b009eeb9a153c6536b62ca031fa0a5b4cec74e8d718fccef6"$''',
+    # Public SHA256 integrity evidence: security/debian-13-amd64-candidate.json, security/provenance/native-seed.json.
+    '''^keyring_sha256": "abced156a22aa8683b228299ac35c1ea51515eef900cec0e562f56716dfe3915"$''',
+    # Public SHA256 integrity evidence: security/ubuntu-24.04-amd64-candidate.json, security/ubuntu-26.04-amd64-candidate.json.
+    '''^keyring_sha256": "aff7b0bd431039349cfd2b8e97e722f360f61dd02f1c2087f911d80c5bd57614"$''',
+    # Public SHA256 integrity evidence: security/debian-13-amd64-candidate.json, security/provenance/native-seed.json.
+    '''^keyring_sha256": "be1a7981908ab9010352131fcbf101a9556f6a61db76a19a1c146d31ef2d72d8"$''',
+    # Public SHA256 integrity evidence: security/provenance/native-seed.json.
+    '''^keys_tsv_sha256": "1b16335017d4e379cd133f0485f089060b64167fb7d4a0514a9ce9e2663cd434"$''',
+]
